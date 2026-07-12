@@ -64,12 +64,12 @@ export default function Dashboard() {
         </Link>
       </div>
 
-      <p className="text-xs text-muted" style={{ margin: '8px 0' }}>Data flows derived directly from backend tables (goals, audits, compliance_issues, participations).</p>
+      <p className="text-xs text-muted" style={{ margin: '8px 0' }}>Data is securely aggregated in real-time across all active environmental, social, and governance modules.</p>
 
       {/* Charts Row */}
       <div className="grid-2 gap-4" style={{ flex: 1, minHeight: '300px' }}>
         <div className="glass-panel p-4 flex-col">
-          <h3 className="text-sm font-semibold mb-4 text-muted flex items-center gap-2">📈 Emissions Trend (Derived from DB)</h3>
+          <h3 className="text-sm font-semibold mb-4 text-muted flex items-center gap-2">📈 Year-to-Date Emissions Reduction</h3>
           <div style={{ flex: 1, width: '100%', minHeight: '200px' }}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={data.emissionsTrend}>
@@ -79,7 +79,7 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="glass-panel p-4 flex-col">
-          <h3 className="text-sm font-semibold mb-4 text-muted flex items-center gap-2">📊 Department ESG Ranking (Based on resolved issues)</h3>
+          <h3 className="text-sm font-semibold mb-4 text-muted flex items-center gap-2">📊 Department ESG Performance</h3>
           <div style={{ flex: 1, width: '100%', minHeight: '200px' }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data.departmentRanking} margin={{bottom: 0}}>
@@ -94,7 +94,7 @@ export default function Dashboard() {
       {/* Bottom Row */}
       <div className="grid-2 gap-4" style={{ paddingBottom: '2rem' }}>
         <div className="glass-panel p-4 flex-col">
-          <h3 className="text-sm font-semibold mb-4 text-muted flex items-center gap-2">🕒 Real-Time Database Activity Feed</h3>
+          <h3 className="text-sm font-semibold mb-4 text-muted flex items-center gap-2">🕒 Real-Time Company Activity Feed</h3>
           <ul className="flex-col gap-2" style={{listStyle: 'none', padding: 0, margin: 0}}>
             {data.recentActivity.map(act => (
               <li key={act.id} className="text-sm flex items-center gap-2" style={{marginBottom: '0.5rem', padding: '0.5rem', background: 'rgba(255,255,255,0.03)', borderRadius: '8px'}}>
@@ -104,7 +104,7 @@ export default function Dashboard() {
                 {act.text}
               </li>
             ))}
-            {data.recentActivity.length === 0 && <li className="text-muted text-sm">No recent activity found in database.</li>}
+            {data.recentActivity.length === 0 && <li className="text-muted text-sm">No recent activity found.</li>}
           </ul>
         </div>
         <div className="glass-panel p-6 flex-col">
