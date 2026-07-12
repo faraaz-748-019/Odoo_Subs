@@ -51,26 +51,10 @@ export default function LoginPage() {
     };
 
     return (
-        <div style={{
-            display: 'flex',
-            width: '100vw',
-            height: '100vh',
-            background: 'radial-gradient(circle at top left, #121820 0%, #0a0c10 100%)',
-            fontFamily: "'Outfit', sans-serif",
-            overflow: 'hidden'
-        }}>
+        <div className="auth-wrapper">
             
             {/* Left Side: Project Overview & Features */}
-            <div style={{
-                flex: 1.2,
-                padding: '4rem',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                borderRight: '1px solid rgba(240, 246, 252, 0.08)',
-                background: 'rgba(255, 255, 255, 0.01)',
-                boxSizing: 'border-box'
-            }} className="no-scrollbar">
+            <div className="auth-overview-panel no-scrollbar">
                 <div style={{ maxWidth: '600px', margin: '0 auto' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2rem' }}>
                         <span style={{ fontSize: '2.5rem' }}>🌍</span>
@@ -138,14 +122,7 @@ export default function LoginPage() {
             </div>
 
             {/* Right Side: Auth Form */}
-            <div style={{
-                flex: 0.9,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '2rem',
-                boxSizing: 'border-box'
-            }}>
+            <div className="auth-form-panel">
                 <div style={{
                     width: '100%',
                     maxWidth: '400px',
