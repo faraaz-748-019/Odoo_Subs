@@ -137,6 +137,10 @@ app.post('/api/social/participations/:id/reject', async (req, res) => {
     await db.run('UPDATE participations SET status = ? WHERE id = ?', ['Rejected', req.params.id]);
     res.json({ success: true });
 });
+app.delete('/api/social/participations/user/:name', async (req, res) => {
+    await db.run('DELETE FROM participations WHERE employee_name = ?', req.params.name);
+    res.json({ success: true });
+});
 
 // --- Governance API (Audits & Issues) ---
 app.get('/api/governance/audits', async (req, res) => {

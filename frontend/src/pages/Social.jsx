@@ -9,15 +9,15 @@ export default function Social() {
   const [formData, setFormData] = useState({ title: '', is_evidence_required: true, status: 'Active' });
 
   const fetchData = () => {
-    fetch('http://localhost:5000/api/social/activities').then(res => res.json()).then(setActivities).catch(console.error);
-    fetch('http://localhost:5000/api/social/participations').then(res => res.json()).then(setQueue).catch(console.error);
+    fetch('http://localhost:5005/api/social/activities').then(res => res.json()).then(setActivities).catch(console.error);
+    fetch('http://localhost:5005/api/social/participations').then(res => res.json()).then(setQueue).catch(console.error);
   };
 
   useEffect(() => fetchData(), []);
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    await fetch('http://localhost:5000/api/social/activities', {
+    await fetch('http://localhost:5005/api/social/activities', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData)
@@ -29,17 +29,17 @@ export default function Social() {
 
   const handleDelete = async (id) => {
     if(!window.confirm("Are you sure you want to delete this activity?")) return;
-    await fetch(`http://localhost:5000/api/social/activities/${id}`, { method: 'DELETE' });
+    await fetch(`http://localhost:5005/api/social/activities/${id}`, { method: 'DELETE' });
     fetchData();
   };
 
   const handleApprove = async (id) => {
-    await fetch(`http://localhost:5000/api/social/participations/${id}/approve`, { method: 'POST' });
+    await fetch(`http://localhost:5005/api/social/participations/${id}/approve`, { method: 'POST' });
     fetchData();
   };
   
   const handleReject = async (id) => {
-    await fetch(`http://localhost:5000/api/social/participations/${id}/reject`, { method: 'POST' });
+    await fetch(`http://localhost:5005/api/social/participations/${id}/reject`, { method: 'POST' });
     fetchData();
   };
 

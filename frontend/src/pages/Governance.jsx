@@ -8,15 +8,15 @@ export default function Governance() {
   const [formData, setFormData] = useState({ title: '', department: 'Procurement', auditor: '', audit_date: '', findings: 'Pending review', status: 'Under Review' });
 
   const fetchData = () => {
-    fetch('http://localhost:5000/api/governance/audits').then(res => res.json()).then(setAudits).catch(console.error);
-    fetch('http://localhost:5000/api/governance/issues').then(res => res.json()).then(setIssues).catch(console.error);
+    fetch('http://localhost:5005/api/governance/audits').then(res => res.json()).then(setAudits).catch(console.error);
+    fetch('http://localhost:5005/api/governance/issues').then(res => res.json()).then(setIssues).catch(console.error);
   };
 
   useEffect(() => fetchData(), []);
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    await fetch('http://localhost:5000/api/governance/audits', {
+    await fetch('http://localhost:5005/api/governance/audits', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData)
@@ -28,12 +28,12 @@ export default function Governance() {
 
   const handleDelete = async (id) => {
     if(!window.confirm("Delete this audit record?")) return;
-    await fetch(`http://localhost:5000/api/governance/audits/${id}`, { method: 'DELETE' });
+    await fetch(`http://localhost:5005/api/governance/audits/${id}`, { method: 'DELETE' });
     fetchData();
   };
 
   const handleResolveIssue = async (id) => {
-    await fetch(`http://localhost:5000/api/governance/issues/${id}/resolve`, { method: 'PUT' });
+    await fetch(`http://localhost:5005/api/governance/issues/${id}/resolve`, { method: 'PUT' });
     fetchData();
   };
 
