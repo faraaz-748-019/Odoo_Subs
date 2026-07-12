@@ -160,6 +160,64 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Flowchart Section */}
+      <section className="flowchart-section">
+        <div className="section-header">
+          <h2 className="section-title">Operational Workflow</h2>
+          <p className="section-subtitle">A seamless 5-step loop from database connection to verified audit exports.</p>
+        </div>
+        
+        <div className="flowchart-timeline">
+          <div className="flowchart-step">
+            <div className="step-number-bubble env">1</div>
+            <div className="step-content glass-panel">
+              <h4>Setup Database</h4>
+              <p>Select your environment. Sign up for a blank production sandbox or join the pre-seeded Demo space.</p>
+            </div>
+          </div>
+          
+          <div className="flowchart-connector">➔</div>
+          
+          <div className="flowchart-step">
+            <div className="step-number-bubble social">2</div>
+            <div className="step-content glass-panel">
+              <h4>Map Telemetry</h4>
+              <p>Populate environmental carbon metrics, fuel expenditures, and facility utilities directly.</p>
+            </div>
+          </div>
+          
+          <div className="flowchart-connector">➔</div>
+          
+          <div className="flowchart-step">
+            <div className="step-number-bubble gov">3</div>
+            <div className="step-content glass-panel">
+              <h4>Deploy Policies</h4>
+              <p>Publish cataloged corporate policies, audit assessments, and issue safety/governance reviews.</p>
+            </div>
+          </div>
+          
+          <div className="flowchart-connector">➔</div>
+          
+          <div className="flowchart-step">
+            <div className="step-number-bubble gamify">4</div>
+            <div className="step-content glass-panel">
+              <h4>Gamify Impact</h4>
+              <p>Launch CSR volunteering challenges, let employees submit proof, and award badges/XP points.</p>
+            </div>
+          </div>
+          
+          <div className="flowchart-connector">➔</div>
+          
+          <div className="flowchart-step">
+            <div className="step-number-bubble reports">5</div>
+            <div className="step-content glass-panel">
+              <h4>Export Audits</h4>
+              <p>Filter logs across categories and departments, view results, and download secure reports.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Footer Section */}
       <section id="architecture" className="cta-footer-section">
         <div className="cta-box glass-panel">
