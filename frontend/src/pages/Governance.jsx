@@ -204,7 +204,7 @@ export default function Governance() {
               </thead>
               <tbody>
                 {audits.map(audit => (
-                  <tr key={audit.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <tr key={audit.id} style={{borderBottom: '1px solid rgba(255,255,255,0.05)'}}>
                     <td className="p-4 text-sm text-muted">{audit.title}</td>
                     <td className="p-4 text-sm text-muted">{audit.department}</td>
                     <td className="p-4 text-sm text-muted">{audit.auditor}</td>
@@ -224,6 +224,13 @@ export default function Governance() {
                     </td>
                   </tr>
                 ))}
+                {audits.length === 0 && (
+                  <tr>
+                    <td colSpan="7" className="p-8 text-center text-muted italic">
+                      No active audit logs found. Click "+ New Audit" to record your first audit.
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -273,6 +280,13 @@ export default function Governance() {
                     </td>
                   </tr>
                 ))}
+                {issues.length === 0 && (
+                  <tr>
+                    <td colSpan="5" className="p-8 text-center text-muted italic">
+                      No compliance issues currently logged. All operations are fully in compliance!
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
