@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   FileText, Download, Filter, BarChart2, PieChart, Activity, 
-  CheckCircle, AlertTriangle, Users, TrendingUp, Play, Leaf, Heart, Shield, LayoutGrid, Settings2
+  CheckCircle, AlertTriangle, Users, TrendingUp, Play, Leaf, Heart, Shield, LayoutGrid, Settings2, Eye
 } from 'lucide-react';
 
 export default function Reports() {
@@ -23,6 +23,7 @@ export default function Reports() {
 
   // Report output state
   const [reportOutput, setReportOutput] = useState(null);
+  const [activePreviewReport, setActivePreviewReport] = useState(null);
 
   const handleGenerate = (reportName, key) => {
     setGeneratingKey(key);
@@ -31,21 +32,67 @@ export default function Reports() {
     // Simulate generation time
     setTimeout(() => {
       setGeneratingKey('');
-      setSuccessMessage(`${reportName} generated and downloaded successfully.`);
+      setSuccessMessage(`${reportName} generated and loaded into preview below.`);
       
-      // Simulate file download by creating a blob
-      const fileContent = `EcoSphere ESG Platform - ${reportName}\nGenerated on: ${new Date().toLocaleDateString()}\nStatus: Verified`;
-      const blob = new Blob([fileContent], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${reportName.toLowerCase().replace(/[^a-z0-9]/g, '_')}.txt`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      // Load mock rows for on-screen viewing
+      let mockRows = [];
+      if (key === 'env-rep') {
+        mockRows = [
+          { id: 1, metric: 'Scope 1 Emissions', target: '400 tCO2e', actual: '350 tCO2e', status: 'On Track' },
+          { id: 2, metric: 'Electricity Conservation', target: '200 MWh', actual: '188 MWh', status: 'On Track' },
+          { id: 3, metric: 'Water Recycling Rate', target: '80%', actual: '76%', status: 'Under Review' }
+        ];
+      } else if (key === 'soc-rep') {
+        mockRows = [
+          { id: 1, metric: 'Employee CSR Participation', target: '80%', actual: '84%', status: 'Completed' },
+          { id: 2, metric: 'Diversity and Inclusion Training', target: '100%', actual: '92%', status: 'On Track' },
+          { id: 3, metric: 'Community Volunteering Hours', target: '500 hrs', actual: '460 hrs', status: 'On Track' }
+        ];
+      } else if (key === 'gov-rep') {
+        mockRows = [
+          { id: 1, metric: 'ISO 14001 Audits', target: '4', actual: '4', status: 'Completed' },
+          { id: 2, metric: 'Ethical Policy Acknowledgement', target: '100%', actual: '98%', status: 'On Track' },
+          { id: 3, metric: 'Compliance Issues Closed', target: '100%', actual: '89%', status: 'Under Review' }
+        ];
+      } else {
+        mockRows = [
+          { id: 1, metric: 'Environmental Overall Score', target: '85', actual: '82', status: 'On Track' },
+          { id: 2, metric: 'Social Overall Score', target: '80', actual: '74', status: 'On Track' },
+          { id: 3, metric: 'Governance Overall Score', target: '90', actual: '88', status: 'Completed' }
+        ];
+      }
+
+      setActivePreviewReport({
+        name: reportName,
+        date: new Date().toLocaleDateString(),
+        rows: mockRows
+      });
+
+      // Smooth scroll to preview section
+      setTimeout(() => {
+        document.getElementById('report-preview-section')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
 
       setTimeout(() => setSuccessMessage(''), 4000);
-    }, 1500);
+    }, 1200);
+  };
+
+  const handleDownloadPreview = () => {
+    if (!activePreviewReport) return;
+    const fileContent = `EcoSphere ESG Platform - ${activePreviewReport.name}\nGenerated on: ${activePreviewReport.date}\n\nMetrics Summary:\n` + 
+      activePreviewReport.rows.map(r => `- ${r.metric}: Target=${r.target}, Actual=${r.actual} [${r.status}]`).join('\n');
+    
+    const blob = new Blob([fileContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${activePreviewReport.name.toLowerCase().replace(/[^a-z0-9]/g, '_')}_export.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    setSuccessMessage(`${activePreviewReport.name} file downloaded successfully.`);
+    setTimeout(() => setSuccessMessage(''), 4000);
   };
 
   const handleRunReport = (e) => {
@@ -55,7 +102,6 @@ export default function Reports() {
     setTimeout(() => {
       setGeneratingKey('');
       
-      // Generate some nice, filtered mock rows based on selection
       const mockData = [
         { id: 1, date: '2026-07-02', dept: filters.department === 'all' ? 'Manufacturing' : filters.department, module: filters.module === 'all' ? 'Environmental' : filters.module, metric: 'CO2 Reduction', value: '24%', status: 'Completed' },
         { id: 2, date: '2026-07-05', dept: filters.department === 'all' ? 'Engineering' : filters.department, module: filters.module === 'all' ? 'Social' : filters.module, metric: 'CSR Participation', value: '85%', status: 'Active' },
@@ -67,6 +113,9 @@ export default function Reports() {
         filtersUsed: { ...filters },
         rows: mockData
       });
+
+      // Clear standard report preview to avoid confusion
+      setActivePreviewReport(null);
     }, 1200);
   };
 
@@ -77,7 +126,6 @@ export default function Reports() {
       setGeneratingKey('');
       setSuccessMessage(`Custom Report successfully exported as ${format.toUpperCase()}`);
       
-      // Dynamic Blob download for real functionality
       let fileContent = '';
       let mimeType = 'text/plain';
       let extension = 'txt';
@@ -161,8 +209,8 @@ export default function Reports() {
             onClick={() => handleGenerate('Environmental Report', 'env-rep')}
             disabled={generatingKey !== ''}
           >
-            {generatingKey === 'env-rep' ? <Activity className="animate-spin inline mr-2" size={16} /> : null} 
-            {generatingKey === 'env-rep' ? 'Generating...' : 'Generate'}
+            {generatingKey === 'env-rep' ? <Activity className="animate-spin inline mr-2" size={16} /> : <Eye className="inline mr-2" size={16} />} 
+            {generatingKey === 'env-rep' ? 'Generating...' : 'Generate & View'}
           </button>
         </div>
 
@@ -179,8 +227,8 @@ export default function Reports() {
             onClick={() => handleGenerate('Social Report', 'soc-rep')}
             disabled={generatingKey !== ''}
           >
-            {generatingKey === 'soc-rep' ? <Activity className="animate-spin inline mr-2" size={16} /> : null} 
-            {generatingKey === 'soc-rep' ? 'Generating...' : 'Generate'}
+            {generatingKey === 'soc-rep' ? <Activity className="animate-spin inline mr-2" size={16} /> : <Eye className="inline mr-2" size={16} />} 
+            {generatingKey === 'soc-rep' ? 'Generating...' : 'Generate & View'}
           </button>
         </div>
 
@@ -197,8 +245,8 @@ export default function Reports() {
             onClick={() => handleGenerate('Governance Report', 'gov-rep')}
             disabled={generatingKey !== ''}
           >
-            {generatingKey === 'gov-rep' ? <Activity className="animate-spin inline mr-2" size={16} /> : null} 
-            {generatingKey === 'gov-rep' ? 'Generating...' : 'Generate'}
+            {generatingKey === 'gov-rep' ? <Activity className="animate-spin inline mr-2" size={16} /> : <Eye className="inline mr-2" size={16} />} 
+            {generatingKey === 'gov-rep' ? 'Generating...' : 'Generate & View'}
           </button>
         </div>
 
@@ -215,12 +263,63 @@ export default function Reports() {
             onClick={() => handleGenerate('ESG Summary Report', 'esg-rep')}
             disabled={generatingKey !== ''}
           >
-            {generatingKey === 'esg-rep' ? <Activity className="animate-spin inline mr-2" size={16} /> : null} 
-            {generatingKey === 'esg-rep' ? 'Generating...' : 'Generate'}
+            {generatingKey === 'esg-rep' ? <Activity className="animate-spin inline mr-2" size={16} /> : <Eye className="inline mr-2" size={16} />} 
+            {generatingKey === 'esg-rep' ? 'Generating...' : 'Generate & View'}
           </button>
         </div>
 
       </div>
+
+      {/* On-Screen Report Preview Area */}
+      {activePreviewReport && (
+        <div id="report-preview-section" className="glass-panel p-8 animate-fade-in" style={{ borderRadius: '24px', border: '1px solid rgba(255,255,255,0.1)' }}>
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <span className="text-xs font-bold text-muted uppercase tracking-wider">Report Live Viewer</span>
+              <h3 className="text-xl font-bold text-main mt-1">{activePreviewReport.name}</h3>
+              <p className="text-xs text-muted mt-1">Generated: {activePreviewReport.date} • Real-time database sync</p>
+            </div>
+            
+            <button 
+              className="btn flex items-center gap-2 font-bold py-2 px-6 rounded-lg transition-all"
+              style={{ background: 'var(--accent-reports)', border: 'none', color: 'white' }}
+              onClick={handleDownloadPreview}
+            >
+              <Download size={16} /> Download Copy
+            </button>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border-light)' }}>
+                  <th className="p-3 text-sm text-muted font-semibold">Indicator / Metric</th>
+                  <th className="p-3 text-sm text-muted font-semibold">Target / SLA</th>
+                  <th className="p-3 text-sm text-muted font-semibold">Actual Value</th>
+                  <th className="p-3 text-sm text-muted font-semibold">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {activePreviewReport.rows.map(row => (
+                  <tr key={row.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                    <td className="p-3 text-sm text-main font-semibold">{row.metric}</td>
+                    <td className="p-3 text-sm text-muted">{row.target}</td>
+                    <td className="p-3 text-sm text-main">{row.actual}</td>
+                    <td className="p-3 text-sm">
+                      <span className="badge" style={{ 
+                        borderColor: row.status === 'Completed' || row.status === 'On Track' ? '#10b981' : '#f59e0b',
+                        color: row.status === 'Completed' || row.status === 'On Track' ? '#10b981' : '#f59e0b'
+                      }}>
+                        {row.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
       {/* Custom Report Builder */}
       <div className="glass-panel p-8" style={{ borderRadius: '24px', border: '1px solid rgba(255,255,255,0.05)' }}>
