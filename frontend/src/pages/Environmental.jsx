@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import Modal from '../components/Modal';
 import { useAuth } from '../context/AuthContext';
+import { API_BASE } from '../config';
 
 export default function Environmental() {
   const { token } = useAuth();
@@ -31,7 +32,7 @@ export default function Environmental() {
   };
 
   const fetchGoals = () => {
-    fetch('http://localhost:5005/api/environmental/goals', { headers: { 'Authorization': `Bearer ${token}` } })
+    fetch(`${API_BASE}/api/environmental/goals`, { headers: { 'Authorization': `Bearer ${token}` } })
       .then(res => res.json())
       .then(data => setGoals(data))
       .catch(console.error);
@@ -61,11 +62,11 @@ export default function Environmental() {
   const handleSave = async (e) => {
     e.preventDefault();
     if (editingId) {
-      await fetch(`http://localhost:5005/api/environmental/goals/${editingId}`, {
+      await fetch(`${API_BASE}/api/environmental/goals/${editingId}`, {
         method: 'PUT', headers, body: JSON.stringify(formData)
       });
     } else {
-      await fetch('http://localhost:5005/api/environmental/goals', {
+      await fetch(`${API_BASE}/api/environmental/goals`, {
         method: 'POST', headers, body: JSON.stringify(formData)
       });
     }
@@ -87,12 +88,12 @@ export default function Environmental() {
   const executeDelete = async () => {
     if (confirmDelete.isMultiple) {
       await Promise.all(
-        Array.from(selectedIds).map(id => fetch(`http://localhost:5005/api/environmental/goals/${id}`, { method: 'DELETE', headers }))
+        Array.from(selectedIds).map(id => fetch(`${API_BASE}/api/environmental/goals/${id}`, { method: 'DELETE', headers }))
       );
       setSelectedIds(new Set());
       showToast(`${selectedIds.size} goal(s) deleted.`, 'success');
     } else if (confirmDelete.id) {
-      await fetch(`http://localhost:5005/api/environmental/goals/${confirmDelete.id}`, { method: 'DELETE', headers });
+      await fetch(`${API_BASE}/api/environmental/goals/${confirmDelete.id}`, { method: 'DELETE', headers });
       showToast("Goal deleted.", 'success');
     }
     setConfirmDelete({ isOpen: false, isMultiple: false, id: null });

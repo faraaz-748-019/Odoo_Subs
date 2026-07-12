@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Leaf, Users, Shield, Award, CheckCircle2, ArrowRight, Info, Check } from 'lucide-react';
+import { API_BASE } from '../config';
 
 export default function LoginPage() {
     const { login } = useAuth();
@@ -17,7 +18,7 @@ export default function LoginPage() {
         setLoading(true);
         try {
             const endpoint = isSignup ? '/api/auth/signup' : '/api/auth/login';
-            const res = await fetch(`http://localhost:5005${endpoint}`, {
+            const res = await fetch(`${API_BASE}${endpoint}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(form)
@@ -37,7 +38,7 @@ export default function LoginPage() {
         setError('');
         setLoading(true);
         try {
-            const res = await fetch('http://localhost:5005/api/auth/demo', { method: 'POST' });
+            const res = await fetch(`${API_BASE}/api/auth/demo`, { method: 'POST' });
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Demo login failed');
             login(data.token, data.user);

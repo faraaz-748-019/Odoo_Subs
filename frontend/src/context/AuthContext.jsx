@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { API_BASE } from '../config';
 
 const AuthContext = createContext();
 
@@ -45,7 +46,7 @@ export const AuthProvider = ({ children }) => {
       ...options.headers
     };
 
-    const response = await fetch(`http://localhost:5005${url}`, { ...options, headers });
+    const response = await fetch(`${API_BASE}${url}`, { ...options, headers });
     
     if (response.status === 401) {
       logout();

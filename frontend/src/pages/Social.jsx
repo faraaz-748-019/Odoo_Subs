@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Modal from '../components/Modal';
 import { useAuth } from '../context/AuthContext';
 import { Users, UserPlus, ShieldAlert, Award, FileText } from 'lucide-react';
+import { API_BASE } from '../config';
 
 export default function Social() {
   const { token } = useAuth();
@@ -17,11 +18,11 @@ export default function Social() {
   const [actionLoadingId, setActionLoadingId] = useState('');
 
   const fetchData = () => {
-    fetch('http://localhost:5005/api/social/activities', { headers })
+    fetch(`${API_BASE}/api/social/activities`, { headers })
       .then(res => res.json())
       .then(setActivities)
       .catch(console.error);
-    fetch('http://localhost:5005/api/social/participations', { headers })
+    fetch(`${API_BASE}/api/social/participations`, { headers })
       .then(res => res.json())
       .then(setQueue)
       .catch(console.error);
@@ -35,7 +36,7 @@ export default function Social() {
     e.preventDefault();
     setActionLoadingId('create');
     try {
-      const res = await fetch('http://localhost:5005/api/social/activities', {
+      const res = await fetch(`${API_BASE}/api/social/activities`, {
         method: 'POST',
         headers,
         body: JSON.stringify(formData)
@@ -54,14 +55,14 @@ export default function Social() {
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this activity?")) return;
-    await fetch(`http://localhost:5005/api/social/activities/${id}`, { method: 'DELETE', headers });
+    await fetch(`${API_BASE}/api/social/activities/${id}`, { method: 'DELETE', headers });
     fetchData();
   };
 
   const handleApprove = async (id) => {
     setActionLoadingId(`approve-${id}`);
     try {
-      await fetch(`http://localhost:5005/api/social/participations/${id}/approve`, { method: 'POST', headers });
+      await fetch(`${API_BASE}/api/social/participations/${id}/approve`, { method: 'POST', headers });
       fetchData();
     } catch (err) {
       console.error(err);
@@ -73,7 +74,7 @@ export default function Social() {
   const handleReject = async (id) => {
     setActionLoadingId(`reject-${id}`);
     try {
-      await fetch(`http://localhost:5005/api/social/participations/${id}/reject`, { method: 'POST', headers });
+      await fetch(`${API_BASE}/api/social/participations/${id}/reject`, { method: 'POST', headers });
       fetchData();
     } catch (err) {
       console.error(err);

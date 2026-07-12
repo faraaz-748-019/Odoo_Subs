@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Modal from '../components/Modal';
 import { useAuth } from '../context/AuthContext';
 import { Shield, FileText, CheckSquare, AlertOctagon, UserCheck } from 'lucide-react';
+import { API_BASE } from '../config';
 
 export default function Governance() {
   const { token } = useAuth();
@@ -29,14 +30,8 @@ export default function Governance() {
   const [actionLoadingId, setActionLoadingId] = useState('');
 
   const fetchData = () => {
-    fetch('http://localhost:5005/api/governance/audits', { headers })
-      .then(res => res.json())
-      .then(setAudits)
-      .catch(console.error);
-    fetch('http://localhost:5005/api/governance/issues', { headers })
-      .then(res => res.json())
-      .then(setIssues)
-      .catch(console.error);
+    fetch(`${API_BASE}/api/governance/audits`, { headers }).then(res => res.json()).then(setAudits).catch(console.error);
+    fetch(`${API_BASE}/api/governance/issues`, { headers }).then(res => res.json()).then(setIssues).catch(console.error);
   };
 
   useEffect(() => {
@@ -47,7 +42,7 @@ export default function Governance() {
     e.preventDefault();
     setActionLoadingId('create-audit');
     try {
-      const res = await fetch('http://localhost:5005/api/governance/audits', {
+      const res = await fetch(`${API_BASE}/api/governance/audits`, {
         method: 'POST',
         headers,
         body: JSON.stringify(auditForm)
@@ -65,7 +60,6 @@ export default function Governance() {
   };
 
   const handleCreatePolicy = (e) => {
-    e.preventDefault();
     setPolicies(prev => [...prev, newPolicy]);
     setPolicyModalOpen(false);
     setNewPolicy({ name: '', code: '', version: 'v1.0', status: 'Draft', date: new Date().toISOString().split('T')[0], ackRate: 0 });
@@ -73,14 +67,14 @@ export default function Governance() {
 
   const handleDeleteAudit = async (id) => {
     if (!window.confirm("Delete this audit record?")) return;
-    await fetch(`http://localhost:5005/api/governance/audits/${id}`, { method: 'DELETE', headers });
+    await fetch(`${API_BASE}/api/governance/audits/${id}`, { method: 'DELETE', headers });
     fetchData();
   };
 
   const handleResolveIssue = async (id) => {
     setActionLoadingId(`resolve-${id}`);
     try {
-      await fetch(`http://localhost:5005/api/governance/issues/${id}/resolve`, { method: 'PUT', headers });
+      await fetch(`${API_BASE}/api/governance/issues/${id}/resolve`, { method: 'PUT', headers });
       fetchData();
     } catch (err) {
       console.error(err);

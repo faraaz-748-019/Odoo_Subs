@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Award, Star, TrendingUp, Heart, Leaf, Sun, Zap, ChevronDown, ChevronUp, Search, ArrowRight, Lock, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Modal from '../components/Modal';
+import { API_BASE } from '../config';
 
 export default function Gamification() {
   const { token, user } = useAuth();
@@ -31,13 +32,13 @@ export default function Gamification() {
 
   const fetchData = () => {
     // Fetch Activities
-    fetch('http://localhost:5005/api/social/activities', { headers })
+    fetch(`${API_BASE}/api/social/activities`, { headers })
       .then(res => res.json())
       .then(setActivities)
       .catch(console.error);
 
     // Fetch Participations
-    fetch('http://localhost:5005/api/social/participations', { headers })
+    fetch(`${API_BASE}/api/social/participations`, { headers })
       .then(res => res.json())
       .then(data => {
         setParticipations(data);
@@ -50,13 +51,13 @@ export default function Gamification() {
       .catch(console.error);
 
     // Fetch Challenges
-    fetch('http://localhost:5005/api/gamification/challenges', { headers })
+    fetch(`${API_BASE}/api/gamification/challenges`, { headers })
       .then(res => res.json())
       .then(setChallenges)
       .catch(console.error);
 
     // Fetch Badges
-    fetch('http://localhost:5005/api/gamification/badges', { headers })
+    fetch(`${API_BASE}/api/gamification/badges`, { headers })
       .then(res => res.json())
       .then(setBadges)
       .catch(console.error);
@@ -118,7 +119,7 @@ export default function Gamification() {
   const handleJoinChallenge = async (challengeId) => {
     setJoiningIds(prev => new Set([...prev, challengeId]));
     try {
-      const res = await fetch(`http://localhost:5005/api/gamification/challenges/${challengeId}/join`, {
+      const res = await fetch(`${API_BASE}/api/gamification/challenges/${challengeId}/join`, {
         method: 'POST',
         headers
       });
@@ -143,7 +144,7 @@ export default function Gamification() {
     e.preventDefault();
     setCreatingChallenge(true);
     try {
-      const res = await fetch('http://localhost:5005/api/gamification/challenges', {
+      const res = await fetch(`${API_BASE}/api/gamification/challenges`, {
         method: 'POST',
         headers,
         body: JSON.stringify(newChallenge)

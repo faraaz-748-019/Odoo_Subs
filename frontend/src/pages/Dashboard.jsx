@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { LineChart, Line, BarChart, Bar, XAxis, ResponsiveContainer } from 'recharts';
 import { useAuth } from '../context/AuthContext';
+import { API_BASE } from '../config';
 
 export default function Dashboard() {
   const { token } = useAuth();
@@ -14,7 +15,7 @@ export default function Dashboard() {
   });
 
   useEffect(() => {
-    fetch('http://localhost:5005/api/dashboard/data', {
+    fetch(`${API_BASE}/api/dashboard/data`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => res.json())

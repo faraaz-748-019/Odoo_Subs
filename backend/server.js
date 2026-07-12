@@ -9,6 +9,11 @@ const app = express();
 const PORT = process.env.PORT || 5005;
 const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-fallback-key-for-dev';
 
+if (!process.env.JWT_SECRET && process.env.NODE_ENV === 'production') {
+    console.error("FATAL: JWT_SECRET environment variable is missing in production!");
+    process.exit(1);
+}
+
 app.use(cors());
 app.use(express.json());
 
@@ -26,6 +31,7 @@ app.post('/api/auth/signup', async (req, res) => {
     try {
         const { email, password, name } = req.body;
         if (!email || !password || !name) return res.status(400).json({ error: 'All fields required' });
+        if (password.length < 8) return res.status(400).json({ error: 'Password must be at least 8 characters long' });
         
         const existingUser = await dbProd.get('SELECT * FROM users WHERE email = ?', [email]);
         if (existingUser) return res.status(400).json({ error: 'User already exists' });
@@ -101,6 +107,8 @@ app.get('/api/dashboard/data', async (req, res) => {
         let scores = { environmental: 0, social: 0, governance: 0, overall: 0 };
         let trends = { environmental: 0, social: 0, governance: 0, overall: 0 };
         
+        const clamp = (val) => Math.max(0, Math.min(100, Math.round(val)));
+
         if (history.length > 0) {
             const current = history[0];
             const previous = history.length > 1 ? history[1] : current;
@@ -108,7 +116,12 @@ app.get('/api/dashboard/data', async (req, res) => {
             const overallCurrent = Math.round((current.environmental + current.social + current.governance) / 3);
             const overallPrevious = Math.round((previous.environmental + previous.social + previous.governance) / 3);
 
-            scores = { environmental: current.environmental, social: current.social, governance: current.governance, overall: overallCurrent };
+            scores = { 
+                environmental: clamp(current.environmental), 
+                social: clamp(current.social), 
+                governance: clamp(current.governance), 
+                overall: clamp(overallCurrent) 
+            };
             trends = { environmental: calcTrend(current.environmental, previous.environmental), social: calcTrend(current.social, previous.social), governance: calcTrend(current.governance, previous.governance), overall: calcTrend(overallCurrent, overallPrevious) };
         }
 
