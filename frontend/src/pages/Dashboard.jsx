@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { LineChart, Line, BarChart, Bar, XAxis, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, BarChart, Bar, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useAuth } from '../context/AuthContext';
 import { API_BASE } from '../config';
 
@@ -39,28 +39,28 @@ export default function Dashboard() {
 
       {/* Top Scores */}
       <div className="grid-4 gap-4">
-        <Link to="/environmental" className="glass-panel p-4 theme-env flex-col justify-between kpi-tile" style={{ minHeight: '130px' }}>
+        <Link to="/environmental" className="glass-panel p-4 theme-env flex-col justify-between kpi-tile" style={{ minHeight: '130px', cursor: 'pointer' }}>
           <div className="flex justify-between items-start">
             <span className="text-muted text-sm font-semibold">Environmental Score</span>
             {renderTrend(data.trends.environmental, '34, 197, 94')}
           </div>
           <div className="score-value theme-env-text text-4xl" style={{ marginTop: 'auto' }}>{data.scores.environmental} <span className="text-sm text-muted" style={{ fontSize: '1rem' }}>/ 100</span></div>
         </Link>
-        <Link to="/social" className="glass-panel p-4 theme-social flex-col justify-between kpi-tile" style={{ minHeight: '130px' }}>
+        <Link to="/social" className="glass-panel p-4 theme-social flex-col justify-between kpi-tile" style={{ minHeight: '130px', cursor: 'pointer' }}>
           <div className="flex justify-between items-start">
             <span className="text-muted text-sm font-semibold">Social Score</span>
             {renderTrend(data.trends.social, '56, 189, 248')}
           </div>
           <div className="score-value theme-social-text text-4xl" style={{ marginTop: 'auto' }}>{data.scores.social} <span className="text-sm text-muted" style={{ fontSize: '1rem' }}>/ 100</span></div>
         </Link>
-        <Link to="/governance" className="glass-panel p-4 theme-gov flex-col justify-between kpi-tile" style={{ minHeight: '130px' }}>
+        <Link to="/governance" className="glass-panel p-4 theme-gov flex-col justify-between kpi-tile" style={{ minHeight: '130px', cursor: 'pointer' }}>
           <div className="flex justify-between items-start">
             <span className="text-muted text-sm font-semibold">Governance Score</span>
             {renderTrend(data.trends.governance, '168, 85, 247')}
           </div>
           <div className="score-value theme-gov-text text-4xl" style={{ marginTop: 'auto' }}>{data.scores.governance} <span className="text-sm text-muted" style={{ fontSize: '1rem' }}>/ 100</span></div>
         </Link>
-        <Link to="/" className="glass-panel p-4 flex-col justify-between kpi-tile overall" style={{ minHeight: '130px' }}>
+        <Link to="/" className="glass-panel p-4 flex-col justify-between kpi-tile overall" style={{ minHeight: '130px', cursor: 'default' }}>
           <div className="flex justify-between items-start">
             <span className="text-muted text-sm font-semibold">Overall ESG Score</span>
             {renderTrend(data.trends.overall, '96, 165, 250')}
@@ -78,6 +78,10 @@ export default function Dashboard() {
           <div style={{ flex: 1, width: '100%', minHeight: '200px' }}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={data.emissionsTrend}>
+                <Tooltip 
+                  contentStyle={{ background: 'rgba(22, 27, 34, 0.95)', border: '1px solid rgba(240, 246, 252, 0.1)', color: 'white' }}
+                  itemStyle={{ color: 'white' }}
+                />
                 <Line type="monotone" dataKey="value" stroke="var(--accent-env)" strokeWidth={3} dot={{ r: 4, fill: 'var(--accent-env)' }} />
               </LineChart>
             </ResponsiveContainer>
@@ -89,6 +93,11 @@ export default function Dashboard() {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data.departmentRanking} margin={{ bottom: 0 }}>
                 <XAxis dataKey="name" stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} />
+                <Tooltip 
+                  contentStyle={{ background: 'rgba(22, 27, 34, 0.95)', border: '1px solid rgba(240, 246, 252, 0.1)', color: 'white' }}
+                  itemStyle={{ color: 'white' }}
+                  cursor={{ fill: 'rgba(255,255,255,0.02)' }}
+                />
                 <Bar dataKey="score" fill="#1f4b6b" radius={[6, 6, 6, 6]} barSize={40} />
               </BarChart>
             </ResponsiveContainer>
