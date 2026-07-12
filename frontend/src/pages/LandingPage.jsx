@@ -244,7 +244,7 @@ export default function LandingPage() {
             <Link to="/app" className="btn-primary">
               Launch Dashboard <ArrowRight size={18} />
             </Link>
-            <Link to="/login" className="btn-secondary">
+            <Link to="/login" className="btn-secondary-glow">
               Login to Demo Space
             </Link>
           </div>
