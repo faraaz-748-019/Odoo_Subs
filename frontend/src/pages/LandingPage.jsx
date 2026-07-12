@@ -1,7 +1,7 @@
 import React, { useRef, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Activity, Leaf, Users, Shield } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -15,23 +15,24 @@ export default function LandingPage() {
   const containerRef = useRef();
 
   useGSAP(() => {
-    // Reveal animations for each section
-    const sections = gsap.utils.toArray('.scroll-section');
+    // Reveal animations for typography sections
+    const sections = gsap.utils.toArray('.text-reveal-section');
     
-    sections.forEach((section, i) => {
-      const content = section.querySelector('.content-block');
+    sections.forEach((section) => {
+      const content = section.querySelector('.reveal-text');
       if (content) {
         gsap.fromTo(content, 
-          { y: 100, opacity: 0 },
+          { y: 50, opacity: 0, scale: 0.95 },
           { 
             y: 0, 
             opacity: 1, 
-            duration: 1,
-            ease: 'power3.out',
+            scale: 1,
+            duration: 1.2,
+            ease: 'expo.out',
             scrollTrigger: {
               trigger: section,
-              start: 'top 60%',
-              end: 'top 20%',
+              start: 'top 70%',
+              end: 'top 30%',
               toggleActions: 'play none none reverse'
             }
           }
@@ -44,86 +45,49 @@ export default function LandingPage() {
   return (
     <div className="landing-container" ref={containerRef}>
       
-      {/* 3D Canvas Background */}
-      <div className="canvas-container">
-        <Canvas>
-          <Suspense fallback={null}>
-            <Scene />
-          </Suspense>
-        </Canvas>
-      </div>
-
-      {/* Scroll Overlay Content */}
+      {/* Scroll Overlay Content - Drives the GSAP Timeline in Scene.jsx */}
       <div className="landing-scroll-container">
         
         {/* Section 1: Hero */}
         <section className="scroll-section" style={{ alignItems: 'center', textAlign: 'center', paddingTop: '15vh' }}>
-          <div className="content-block" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <h1 className="landing-title">The Future of<br/>ESG Intelligence</h1>
-            <p className="landing-subtitle">
-              Unify your Environmental, Social, and Governance data into a single, actionable digital twin. Empower your workforce with gamified sustainability.
-            </p>
-            <div style={{ marginTop: '2rem' }}>
-              <span className="text-muted text-sm uppercase tracking-widest block mb-4">Scroll to explore</span>
-              <div className="animate-spin" style={{ width: '1px', height: '40px', background: 'linear-gradient(to bottom, rgba(255,255,255,0.5), transparent)', margin: '0 auto' }} />
+          <div className="text-reveal-section" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div className="reveal-text">
+              <h1 className="landing-title">The Future of<br/>ESG Intelligence</h1>
+              <p className="landing-subtitle">
+                Unify your Environmental, Social, and Governance data into a single, actionable digital twin. 
+              </p>
+            </div>
+            <div style={{ marginTop: '3rem', pointerEvents: 'auto' }}>
+              <span className="text-muted text-xs uppercase tracking-widest block mb-4">Scroll to explore</span>
+              <div className="animate-spin" style={{ width: '1px', height: '60px', background: 'linear-gradient(to bottom, rgba(255,255,255,0.6), transparent)', margin: '0 auto' }} />
             </div>
           </div>
         </section>
 
-        {/* Section 2: Environmental */}
-        <section className="scroll-section" style={{ alignItems: 'flex-start' }}>
-          <div className="content-block landing-glass-card">
-            <div className="flex items-center gap-3 mb-4">
-              <Leaf size={32} color="#34d399" />
-              <h2 className="section-heading text-gradient-env" style={{ fontSize: '2.5rem', marginBottom: 0 }}>Environmental</h2>
-            </div>
-            <p className="text-lg text-muted mb-6">
-              Track carbon footprints, monitor energy consumption, and manage waste reduction across all facilities in real-time.
+        {/* Section 2: Environmental (Triggers 3D panel movement) */}
+        <section className="scroll-section text-reveal-section" style={{ alignItems: 'flex-start' }}>
+          <div className="reveal-text" style={{ maxWidth: '400px' }}>
+            <h2 className="section-heading text-gradient-env">Planetary Scale.</h2>
+            <p className="text-lg text-muted">
+              Live telemetry from your global facilities, tracking emissions, energy, and water usage in real-time.
             </p>
-            <div className="flex gap-4">
-              <div style={{ background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '12px', flex: 1 }}>
-                <div className="text-xs text-muted uppercase font-semibold mb-1">CO2 Reduction</div>
-                <div className="text-2xl font-bold text-white">-24%</div>
-              </div>
-              <div style={{ background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '12px', flex: 1 }}>
-                <div className="text-xs text-muted uppercase font-semibold mb-1">Energy Saved</div>
-                <div className="text-2xl font-bold text-white">1.2GWh</div>
-              </div>
-            </div>
           </div>
         </section>
 
-        {/* Section 3: Social & Governance */}
-        <section className="scroll-section" style={{ alignItems: 'flex-end' }}>
-          <div className="content-block landing-glass-card">
-            <div className="flex items-center gap-3 mb-4">
-              <Users size={32} color="#fb7185" />
-              <Shield size={32} color="#60a5fa" style={{ marginLeft: '1rem' }} />
-              <h2 className="section-heading text-gradient-soc" style={{ fontSize: '2.5rem', marginBottom: 0 }}>Social & Gov</h2>
-            </div>
-            <p className="text-lg text-muted mb-6">
-              Foster a diverse workforce, ensure global compliance, and track ethical sourcing standards seamlessly.
+        {/* Section 3: Social & Governance (Triggers 3D panel movement) */}
+        <section className="scroll-section text-reveal-section" style={{ alignItems: 'flex-end', textAlign: 'right' }}>
+          <div className="reveal-text" style={{ maxWidth: '450px' }}>
+            <h2 className="section-heading text-gradient-soc">Human Impact.</h2>
+            <p className="text-lg text-muted">
+              Ensure diversity, compliance, and ethical sourcing at every level of your organization.
             </p>
-            <div className="flex gap-4">
-              <div style={{ background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '12px', flex: 1 }}>
-                <div className="text-xs text-muted uppercase font-semibold mb-1">Diversity Score</div>
-                <div className="text-2xl font-bold text-white">88/100</div>
-              </div>
-              <div style={{ background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '12px', flex: 1 }}>
-                <div className="text-xs text-muted uppercase font-semibold mb-1">Compliance</div>
-                <div className="text-2xl font-bold text-white">99.9%</div>
-              </div>
-            </div>
           </div>
         </section>
 
-        {/* Section 4: Launch CTA */}
-        <section className="scroll-section" style={{ alignItems: 'center', textAlign: 'center', justifyContent: 'center' }}>
-          <div className="content-block">
-            <h2 className="landing-title" style={{ fontSize: '4rem', marginBottom: '1rem' }}>Enter the EcoSphere</h2>
-            <p className="landing-subtitle" style={{ margin: '0 auto 3rem auto' }}>
-              Your digital command center is ready.
-            </p>
+        {/* Section 4: Launch CTA (Triggers final Convergence in 3D) */}
+        <section className="scroll-section text-reveal-section" style={{ alignItems: 'center', textAlign: 'center', justifyContent: 'center' }}>
+          <div className="reveal-text" style={{ pointerEvents: 'auto' }}>
+            <h2 className="landing-title" style={{ fontSize: '3.5rem', marginBottom: '1.5rem' }}>Enter the EcoSphere</h2>
             <Link to="/app" className="launch-cta">
               Launch Dashboard <ArrowRight size={20} />
             </Link>
@@ -131,6 +95,17 @@ export default function LandingPage() {
         </section>
 
       </div>
+
+      {/* 3D Canvas Background - Spans entire viewport. Moved to bottom of DOM so GSAP can find scroll container */}
+      <div className="canvas-container">
+        {/* Added dpr to cap pixel ratio to 1 or 1.5 to save performance on laptops */}
+        <Canvas dpr={[1, 1.5]}>
+          <Suspense fallback={null}>
+            <Scene />
+          </Suspense>
+        </Canvas>
+      </div>
+
     </div>
   );
 }
