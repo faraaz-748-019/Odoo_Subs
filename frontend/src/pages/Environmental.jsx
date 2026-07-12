@@ -194,6 +194,7 @@ export default function Environmental() {
               <th className="p-4 text-sm text-muted font-semibold text-right">Actions</th>
             </tr>
           </thead>
+          <tbody>
             {filteredGoals.map(goal => {
               const progress = Math.round((goal.current_co2 / goal.target_co2) * 100) || 0;
               return (
