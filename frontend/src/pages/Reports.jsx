@@ -30,38 +30,30 @@ export default function Reports() {
       </div>
 
       {/* Sub-Navigation Tabs */}
-      <div className="flex gap-4 border-b border-light pb-2 mb-4 overflow-x-auto no-scrollbar">
-        <button 
-          className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition-colors ${activeTab === 'environmental' ? 'bg-panel-solid text-white border-b-2 border-green-500' : 'text-muted hover:text-white'}`}
-          onClick={() => setActiveTab('environmental')}
-        >
-          Environmental
-        </button>
-        <button 
-          className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition-colors ${activeTab === 'social' ? 'bg-panel-solid text-white border-b-2 border-rose-500' : 'text-muted hover:text-white'}`}
-          onClick={() => setActiveTab('social')}
-        >
-          Social
-        </button>
-        <button 
-          className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition-colors ${activeTab === 'governance' ? 'bg-panel-solid text-white border-b-2 border-blue-500' : 'text-muted hover:text-white'}`}
-          onClick={() => setActiveTab('governance')}
-        >
-          Governance
-        </button>
-        <button 
-          className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition-colors ${activeTab === 'esg-summary' ? 'bg-[var(--bg-panel-solid)] text-white border-b-2 border-gray-400' : 'text-muted hover:text-white'}`}
-          onClick={() => setActiveTab('esg-summary')}
-          style={{ background: activeTab === 'esg-summary' ? 'rgba(255,255,255,0.05)' : 'transparent', borderColor: activeTab === 'esg-summary' ? '#cbd5e1' : 'transparent' }}
-        >
-          ESG Summary
-        </button>
-        <button 
-          className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition-colors ${activeTab === 'custom' ? 'bg-panel-solid text-white border-b-2 border-[var(--accent-reports)]' : 'text-muted hover:text-white'}`}
-          onClick={() => setActiveTab('custom')}
-        >
-          Custom Builder
-        </button>
+      <div className="sub-nav" style={{ borderBottom: '1px solid var(--border-light)', paddingBottom: '0.5rem' }}>
+        {[
+          { key: 'environmental', label: 'Environmental', color: '#10b981' },
+          { key: 'social', label: 'Social', color: '#f43f5e' },
+          { key: 'governance', label: 'Governance', color: '#3b82f6' },
+          { key: 'esg-summary', label: 'ESG Summary', color: '#cbd5e1' },
+          { key: 'custom', label: 'Custom Builder', color: 'var(--accent-reports)' }
+        ].map(tab => (
+          <button
+            key={tab.key}
+            className="text-sm font-semibold rounded-t-lg transition-colors"
+            onClick={() => setActiveTab(tab.key)}
+            style={{
+              padding: '0.5rem 1rem',
+              background: activeTab === tab.key ? 'rgba(255,255,255,0.05)' : 'transparent',
+              color: activeTab === tab.key ? '#fff' : 'var(--text-muted)',
+              borderBottom: activeTab === tab.key ? `2px solid ${tab.color}` : '2px solid transparent',
+              border: activeTab !== tab.key ? 'none' : undefined,
+              cursor: 'pointer'
+            }}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
 
       {successMessage && (
@@ -75,7 +67,7 @@ export default function Reports() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
         
         {/* Environmental Report */}
-        <div className="glass-panel p-6 flex flex-col hover-lift" style={{ borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)' }}>
+        <div className="glass-panel p-6 flex-col hover-lift" style={{ borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)' }}>
           <div className="flex items-center gap-2 mb-2">
             <Leaf size={20} color="#10b981" />
             <h3 className="font-bold text-main">Environmental Report</h3>
@@ -92,7 +84,7 @@ export default function Reports() {
         </div>
 
         {/* Social Report */}
-        <div className="glass-panel p-6 flex flex-col hover-lift" style={{ borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)' }}>
+        <div className="glass-panel p-6 flex-col hover-lift" style={{ borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)' }}>
           <div className="flex items-center gap-2 mb-2">
             <Heart size={20} color="#f43f5e" />
             <h3 className="font-bold text-main">Social Report</h3>
@@ -109,7 +101,7 @@ export default function Reports() {
         </div>
 
         {/* Governance Report */}
-        <div className="glass-panel p-6 flex flex-col hover-lift" style={{ borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)' }}>
+        <div className="glass-panel p-6 flex-col hover-lift" style={{ borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)' }}>
           <div className="flex items-center gap-2 mb-2">
             <Shield size={20} color="#3b82f6" />
             <h3 className="font-bold text-main">Governance Report</h3>
@@ -126,7 +118,7 @@ export default function Reports() {
         </div>
 
         {/* ESG Summary */}
-        <div className="glass-panel p-6 flex flex-col hover-lift" style={{ borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)' }}>
+        <div className="glass-panel p-6 flex-col hover-lift" style={{ borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)' }}>
           <div className="flex items-center gap-2 mb-2">
             <LayoutGrid size={20} className="theme-reports-text" />
             <h3 className="font-bold text-main">ESG Summary</h3>

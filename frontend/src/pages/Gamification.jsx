@@ -205,7 +205,7 @@ export default function Gamification() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
             {/* Sustainability Sprint */}
-            <div className="glass-panel p-6 flex flex-col gap-3 hover-lift" style={{ border: '2px solid var(--accent-gamify)', borderRadius: '24px' }}>
+            <div className="glass-panel p-6 flex-col gap-3 hover-lift" style={{ border: '2px solid var(--accent-gamify)', borderRadius: '24px' }}>
               <div className="flex items-center gap-2 mb-1">
                 <span style={{ fontSize: '1.2rem' }}>🌍</span>
                 <h3 className="font-bold text-main text-lg">Sustainability Sprint</h3>
@@ -219,7 +219,7 @@ export default function Gamification() {
             </div>
 
             {/* Recycle Challenge */}
-            <div className="glass-panel p-6 flex flex-col gap-3 hover-lift" style={{ border: '2px solid var(--accent-gamify)', borderRadius: '24px' }}>
+            <div className="glass-panel p-6 flex-col gap-3 hover-lift" style={{ border: '2px solid var(--accent-gamify)', borderRadius: '24px' }}>
               <div className="flex items-center gap-2 mb-1">
                 <span style={{ fontSize: '1.2rem' }}>♻️</span>
                 <h3 className="font-bold text-main text-lg">Recycle Challenge</h3>
@@ -233,7 +233,7 @@ export default function Gamification() {
             </div>
 
             {/* Commute Green Week */}
-            <div className="glass-panel p-6 flex flex-col gap-3 hover-lift" style={{ border: '2px solid var(--accent-gamify)', borderRadius: '24px' }}>
+            <div className="glass-panel p-6 flex-col gap-3 hover-lift" style={{ border: '2px solid var(--accent-gamify)', borderRadius: '24px' }}>
               <div className="flex items-center gap-2 mb-1">
                 <span style={{ fontSize: '1.2rem' }}>🚴</span>
                 <h3 className="font-bold text-main text-lg">Commute Green Week</h3>
@@ -366,7 +366,7 @@ export default function Gamification() {
               
               return (
                 <div className="animate-fade-in">
-                  <div className="grid grid-cols-2 gap-8 mb-6">
+                  <div className="grid-2 gap-8 mb-6">
                     {/* User A Card */}
                     <div className="glass-panel p-6" style={{ background: 'rgba(255,255,255,0.02)' }}>
                       <div className="flex items-center gap-4 mb-6">

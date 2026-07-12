@@ -36,35 +36,28 @@ export default function Settings() {
     <div className="module-layout p-6 flex-col gap-6" style={{ height: '100%', overflowY: 'auto' }}>
       
       {/* Sub-Navigation Tabs */}
-      <div className="flex gap-4 border-b border-light pb-2 mb-4 overflow-x-auto no-scrollbar">
-        <button 
-          className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition-colors ${activeTab === 'departments' ? 'bg-[var(--bg-panel-solid)] text-white' : 'text-muted hover:text-white'}`}
-          onClick={() => setActiveTab('departments')}
-          style={{ background: activeTab === 'departments' ? '#cbd5e1' : 'transparent', color: activeTab === 'departments' ? '#161b22' : 'var(--text-muted)' }}
-        >
-          Departments
-        </button>
-        <button 
-          className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition-colors ${activeTab === 'categories' ? 'bg-[var(--bg-panel-solid)] text-white' : 'text-muted hover:text-white'}`}
-          onClick={() => setActiveTab('categories')}
-          style={{ border: '1px solid rgba(255,255,255,0.1)' }}
-        >
-          Categories
-        </button>
-        <button 
-          className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition-colors ${activeTab === 'esg' ? 'bg-[var(--bg-panel-solid)] text-white' : 'text-muted hover:text-white'}`}
-          onClick={() => setActiveTab('esg')}
-          style={{ border: '1px solid rgba(255,255,255,0.1)' }}
-        >
-          ESG Configuration
-        </button>
-        <button 
-          className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition-colors ${activeTab === 'notifications' ? 'bg-[var(--bg-panel-solid)] text-white' : 'text-muted hover:text-white'}`}
-          onClick={() => setActiveTab('notifications')}
-          style={{ border: '1px solid rgba(255,255,255,0.1)' }}
-        >
-          Notification Settings
-        </button>
+      <div className="sub-nav" style={{ borderBottom: '1px solid var(--border-light)', paddingBottom: '0.5rem' }}>
+        {[
+          { key: 'departments', label: 'Departments' },
+          { key: 'categories', label: 'Categories' },
+          { key: 'esg', label: 'ESG Configuration' },
+          { key: 'notifications', label: 'Notification Settings' }
+        ].map(tab => (
+          <button
+            key={tab.key}
+            className="text-sm font-semibold rounded-t-lg transition-colors"
+            onClick={() => setActiveTab(tab.key)}
+            style={{
+              padding: '0.5rem 1rem',
+              background: activeTab === tab.key ? '#cbd5e1' : 'transparent',
+              color: activeTab === tab.key ? '#161b22' : 'var(--text-muted)',
+              border: activeTab !== tab.key ? '1px solid rgba(255,255,255,0.1)' : 'none',
+              cursor: 'pointer'
+            }}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
 
       {/* Action Buttons */}
@@ -129,7 +122,7 @@ export default function Settings() {
       <div>
         <h3 className="text-sm font-semibold text-muted mb-4">ESG Configuration & Notifications</h3>
         
-        <div className="flex flex-col gap-4">
+        <div className="flex-col gap-4">
           <div className="flex items-center">
             <Toggle active={toggles[0]} onClick={() => toggleSetting(0)} />
             <span className="text-sm text-white font-semibold">Enable auto emission calculation</span>
