@@ -171,6 +171,9 @@ export default function LandingPage() {
           <div className="flowchart-step">
             <div className="step-number-bubble env">1</div>
             <div className="step-content glass-panel">
+              <div className="step-image-wrapper">
+                <img src="/step1_db.png" alt="Database Setup" />
+              </div>
               <h4>Setup Database</h4>
               <p>Select your environment. Sign up for a blank production sandbox or join the pre-seeded Demo space.</p>
             </div>
@@ -181,6 +184,9 @@ export default function LandingPage() {
           <div className="flowchart-step">
             <div className="step-number-bubble social">2</div>
             <div className="step-content glass-panel">
+              <div className="step-image-wrapper">
+                <img src="/step2_telemetry.png" alt="Map Telemetry" />
+              </div>
               <h4>Map Telemetry</h4>
               <p>Populate environmental carbon metrics, fuel expenditures, and facility utilities directly.</p>
             </div>
@@ -191,6 +197,9 @@ export default function LandingPage() {
           <div className="flowchart-step">
             <div className="step-number-bubble gov">3</div>
             <div className="step-content glass-panel">
+              <div className="step-image-wrapper">
+                <img src="/step3_policy.png" alt="Deploy Policies" />
+              </div>
               <h4>Deploy Policies</h4>
               <p>Publish cataloged corporate policies, audit assessments, and issue safety/governance reviews.</p>
             </div>
@@ -201,6 +210,9 @@ export default function LandingPage() {
           <div className="flowchart-step">
             <div className="step-number-bubble gamify">4</div>
             <div className="step-content glass-panel">
+              <div className="step-image-wrapper">
+                <img src="/step4_gamify.png" alt="Gamify Impact" />
+              </div>
               <h4>Gamify Impact</h4>
               <p>Launch CSR volunteering challenges, let employees submit proof, and award badges/XP points.</p>
             </div>
@@ -211,6 +223,9 @@ export default function LandingPage() {
           <div className="flowchart-step">
             <div className="step-number-bubble reports">5</div>
             <div className="step-content glass-panel">
+              <div className="step-image-wrapper">
+                <img src="/step5_export.png" alt="Export Audits" />
+              </div>
               <h4>Export Audits</h4>
               <p>Filter logs across categories and departments, view results, and download secure reports.</p>
             </div>
