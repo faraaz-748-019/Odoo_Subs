@@ -51,12 +51,24 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="auth-wrapper">
+        <div className="auth-wrapper" style={{ position: 'relative' }}>
+            {/* Ambient Glowing Orbs in Background */}
+            <div className="ambient-orb orb-green"></div>
+            <div className="ambient-orb orb-purple"></div>
+            <div className="ambient-orb orb-blue"></div>
+            
+            {/* Grid Overlay */}
+            <div className="grid-overlay"></div>
             
             {/* Left Side: Project Overview & Features */}
-            <div className="auth-overview-panel no-scrollbar">
+            <div className="auth-overview-panel no-scrollbar" style={{ zIndex: 5 }}>
                 <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2rem' }}>
+                    <div className="launch-badge">
+                        <span className="launch-pulse"></span>
+                        Introducing EcoSphere V2.0 ESG Command Center
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.5rem' }}>
                         <span style={{ fontSize: '2.5rem' }}>🌍</span>
                         <span style={{ fontSize: '2rem', fontWeight: 800, color: '#f0f6fc', letterSpacing: '-0.5px' }}>EcoSphere</span>
                     </div>
@@ -72,14 +84,14 @@ export default function LoginPage() {
                         The Unified Digital Twin for Corporate ESG & Sustainability.
                     </h1>
                     
-                    <p style={{ color: '#8b949e', fontSize: '1.05rem', lineHeight: 1.6, marginBottom: '2.5rem' }}>
+                    <p style={{ color: '#8b949e', fontSize: '1.05rem', lineHeight: 1.6, marginBottom: '2rem' }}>
                         EcoSphere bridges the gap between environmental responsibility, compliance audit standards, and active employee engagement. Track live telemetry, manage policies, and gamify CSR impact from a single command center.
                     </p>
 
                     {/* Features List */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-                            <div style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', padding: '10px', borderRadius: '10px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        <div className="feature-card">
+                            <div className="feature-icon-wrapper env">
                                 <Leaf size={20} />
                             </div>
                             <div>
@@ -88,8 +100,8 @@ export default function LoginPage() {
                             </div>
                         </div>
 
-                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-                            <div style={{ background: 'rgba(244, 63, 94, 0.1)', color: '#f43f5e', padding: '10px', borderRadius: '10px' }}>
+                        <div className="feature-card">
+                            <div className="feature-icon-wrapper social">
                                 <Users size={20} />
                             </div>
                             <div>
@@ -98,8 +110,8 @@ export default function LoginPage() {
                             </div>
                         </div>
 
-                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-                            <div style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', padding: '10px', borderRadius: '10px' }}>
+                        <div className="feature-card">
+                            <div className="feature-icon-wrapper gov">
                                 <Shield size={20} />
                             </div>
                             <div>
@@ -108,8 +120,8 @@ export default function LoginPage() {
                             </div>
                         </div>
 
-                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-                            <div style={{ background: 'rgba(168, 85, 246, 0.1)', color: '#a855f7', padding: '10px', borderRadius: '10px' }}>
+                        <div className="feature-card">
+                            <div className="feature-icon-wrapper gamify">
                                 <Award size={20} />
                             </div>
                             <div>
@@ -122,17 +134,8 @@ export default function LoginPage() {
             </div>
 
             {/* Right Side: Auth Form */}
-            <div className="auth-form-panel">
-                <div style={{
-                    width: '100%',
-                    maxWidth: '400px',
-                    padding: '2.5rem',
-                    background: 'rgba(22, 27, 34, 0.4)',
-                    backdropFilter: 'blur(20px)',
-                    border: '1px solid rgba(240, 246, 252, 0.08)',
-                    borderRadius: '24px',
-                    boxShadow: '0 20px 60px rgba(0,0,0,0.5)'
-                }}>
+            <div className="auth-form-panel" style={{ zIndex: 5 }}>
+                <div className="auth-form-card">
                     
                     <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
                         <h2 style={{ fontSize: '1.75rem', fontWeight: 700, color: '#f0f6fc', margin: '0 0 8px 0' }}>
