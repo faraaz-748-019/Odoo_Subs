@@ -3,11 +3,15 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AppLayout from './components/AppLayout';
 import { Dashboard, Environmental, Social, Governance, Gamification, Reports, Settings } from './pages';
 
+import LandingPage from './pages/LandingPage';
+
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<AppLayout />}>
+        <Route path="/" element={<LandingPage />} />
+        
+        <Route path="/app" element={<AppLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="environmental" element={<Environmental />} />
           <Route path="social" element={<Social />} />

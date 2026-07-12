@@ -1,0 +1,135 @@
+/* Cinematic Landing Page Styles */
+
+.landing-container {
+  width: 100vw;
+  background-color: #050505;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+/* 3D Canvas Background */
+.canvas-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none; /* Let clicks pass through to scroll sections if needed */
+}
+
+/* Scroll Overlay Container */
+.landing-scroll-container {
+  position: relative;
+  z-index: 10;
+}
+
+/* Individual Scroll Sections */
+.scroll-section {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem 10vw;
+  pointer-events: none; /* Sections are mostly empty space for scrolling */
+}
+
+/* Make actual content blocks clickable */
+.content-block {
+  pointer-events: auto;
+  max-width: 600px;
+}
+
+/* Premium Typography */
+.landing-title {
+  font-size: 5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1.5rem;
+}
+
+.landing-subtitle {
+  font-size: 1.5rem;
+  color: #a1a1aa;
+  font-weight: 400;
+  line-height: 1.5;
+  margin-bottom: 2.5rem;
+  max-width: 500px;
+}
+
+.section-heading {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+/* Glassmorphism Cards for landing */
+.landing-glass-card {
+  background: rgba(25, 25, 30, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 2.5rem;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.landing-glass-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-5px);
+}
+
+/* Gradient accents */
+.text-gradient-env {
+  background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-soc {
+  background: linear-gradient(135deg, #fb7185 0%, #e11d48 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-gov {
+  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Launch CTA */
+.launch-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: #ffffff;
+  color: #000000;
+  font-weight: 600;
+  font-size: 1.125rem;
+  border-radius: 99px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  pointer-events: auto;
+}
+
+.launch-cta:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+}
+
+.launch-cta svg {
+  transition: transform 0.3s ease;
+}
+
+.launch-cta:hover svg {
+  transform: translateX(4px);
+}
