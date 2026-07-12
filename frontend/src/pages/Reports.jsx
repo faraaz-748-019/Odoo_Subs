@@ -6,19 +6,101 @@ import {
 
 export default function Reports() {
   const [activeTab, setActiveTab] = useState('esg-summary');
-  const [generating, setGenerating] = useState(false);
+  
+  // Track separate loading keys instead of a single boolean
+  const [generatingKey, setGeneratingKey] = useState(''); 
   const [successMessage, setSuccessMessage] = useState('');
 
-  const handleGenerate = (reportName) => {
-    setGenerating(true);
+  // Filter States
+  const [filters, setFilters] = useState({
+    dateRange: 'ytd',
+    department: 'all',
+    module: 'all',
+    employee: 'all',
+    challenge: 'all',
+    esgCategory: 'all'
+  });
+
+  // Report output state
+  const [reportOutput, setReportOutput] = useState(null);
+
+  const handleGenerate = (reportName, key) => {
+    setGeneratingKey(key);
     setSuccessMessage('');
     
     // Simulate generation time
     setTimeout(() => {
-      setGenerating(false);
+      setGeneratingKey('');
       setSuccessMessage(`${reportName} generated and downloaded successfully.`);
-      setTimeout(() => setSuccessMessage(''), 3000);
+      
+      // Simulate file download by creating a blob
+      const fileContent = `EcoSphere ESG Platform - ${reportName}\nGenerated on: ${new Date().toLocaleDateString()}\nStatus: Verified`;
+      const blob = new Blob([fileContent], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${reportName.toLowerCase().replace(/[^a-z0-9]/g, '_')}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      setTimeout(() => setSuccessMessage(''), 4000);
     }, 1500);
+  };
+
+  const handleRunReport = (e) => {
+    e.preventDefault();
+    setGeneratingKey('run-report');
+    
+    setTimeout(() => {
+      setGeneratingKey('');
+      
+      // Generate some nice, filtered mock rows based on selection
+      const mockData = [
+        { id: 1, date: '2026-07-02', dept: filters.department === 'all' ? 'Manufacturing' : filters.department, module: filters.module === 'all' ? 'Environmental' : filters.module, metric: 'CO2 Reduction', value: '24%', status: 'Completed' },
+        { id: 2, date: '2026-07-05', dept: filters.department === 'all' ? 'Engineering' : filters.department, module: filters.module === 'all' ? 'Social' : filters.module, metric: 'CSR Participation', value: '85%', status: 'Active' },
+        { id: 3, date: '2026-07-08', dept: filters.department === 'all' ? 'Corporate' : filters.department, module: filters.module === 'all' ? 'Governance' : filters.module, metric: 'Audits Completed', value: '100%', status: 'Under Review' }
+      ];
+
+      setReportOutput({
+        timestamp: new Date().toLocaleTimeString(),
+        filtersUsed: { ...filters },
+        rows: mockData
+      });
+    }, 1200);
+  };
+
+  const triggerExport = (format) => {
+    setGeneratingKey(`export-${format}`);
+    
+    setTimeout(() => {
+      setGeneratingKey('');
+      setSuccessMessage(`Custom Report successfully exported as ${format.toUpperCase()}`);
+      
+      // Dynamic Blob download for real functionality
+      let fileContent = '';
+      let mimeType = 'text/plain';
+      let extension = 'txt';
+
+      if (format === 'csv') {
+        fileContent = 'ID,Date,Department,Module,Metric,Value,Status\n1,2026-07-02,Manufacturing,Environmental,CO2 Reduction,24%,Completed\n2,2026-07-05,Engineering,Social,CSR Participation,85%,Active';
+        mimeType = 'text/csv';
+        extension = 'csv';
+      } else {
+        fileContent = `EcoSphere ESG Export - Format: ${format.toUpperCase()}\nGenerated on: ${new Date().toLocaleDateString()}\nData summary matches active filters.`;
+      }
+
+      const blob = new Blob([fileContent], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `esg_report_export.${extension}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      setTimeout(() => setSuccessMessage(''), 4000);
+    }, 1200);
   };
 
   return (
@@ -76,10 +158,11 @@ export default function Reports() {
           <button 
             className="btn mt-auto font-semibold py-2 px-6 rounded-lg self-start transition-all"
             style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}
-            onClick={() => handleGenerate('Environmental Report')}
-            disabled={generating}
+            onClick={() => handleGenerate('Environmental Report', 'env-rep')}
+            disabled={generatingKey !== ''}
           >
-            {generating ? <Activity className="animate-spin inline mr-2" size={16} /> : null} Generate
+            {generatingKey === 'env-rep' ? <Activity className="animate-spin inline mr-2" size={16} /> : null} 
+            {generatingKey === 'env-rep' ? 'Generating...' : 'Generate'}
           </button>
         </div>
 
@@ -93,10 +176,11 @@ export default function Reports() {
           <button 
             className="btn mt-auto font-semibold py-2 px-6 rounded-lg self-start transition-all"
             style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}
-            onClick={() => handleGenerate('Social Report')}
-            disabled={generating}
+            onClick={() => handleGenerate('Social Report', 'soc-rep')}
+            disabled={generatingKey !== ''}
           >
-            {generating ? <Activity className="animate-spin inline mr-2" size={16} /> : null} Generate
+            {generatingKey === 'soc-rep' ? <Activity className="animate-spin inline mr-2" size={16} /> : null} 
+            {generatingKey === 'soc-rep' ? 'Generating...' : 'Generate'}
           </button>
         </div>
 
@@ -110,10 +194,11 @@ export default function Reports() {
           <button 
             className="btn mt-auto font-semibold py-2 px-6 rounded-lg self-start transition-all"
             style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}
-            onClick={() => handleGenerate('Governance Report')}
-            disabled={generating}
+            onClick={() => handleGenerate('Governance Report', 'gov-rep')}
+            disabled={generatingKey !== ''}
           >
-            {generating ? <Activity className="animate-spin inline mr-2" size={16} /> : null} Generate
+            {generatingKey === 'gov-rep' ? <Activity className="animate-spin inline mr-2" size={16} /> : null} 
+            {generatingKey === 'gov-rep' ? 'Generating...' : 'Generate'}
           </button>
         </div>
 
@@ -127,10 +212,11 @@ export default function Reports() {
           <button 
             className="btn mt-auto font-semibold py-2 px-6 rounded-lg self-start transition-all"
             style={{ background: 'rgba(255,255,255,0.1)', color: 'white' }}
-            onClick={() => handleGenerate('ESG Summary Report')}
-            disabled={generating}
+            onClick={() => handleGenerate('ESG Summary Report', 'esg-rep')}
+            disabled={generatingKey !== ''}
           >
-            {generating ? <Activity className="animate-spin inline mr-2" size={16} /> : null} Generate
+            {generatingKey === 'esg-rep' ? <Activity className="animate-spin inline mr-2" size={16} /> : null} 
+            {generatingKey === 'esg-rep' ? 'Generating...' : 'Generate'}
           </button>
         </div>
 
@@ -145,8 +231,13 @@ export default function Reports() {
         {/* Filters Row */}
         <div className="flex flex-wrap gap-4 mb-8">
           <div className="flex-1" style={{ minWidth: '150px' }}>
-            <select className="form-input w-full rounded-lg" style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)' }}>
-              <option value="">Date Range</option>
+            <label className="text-xs text-muted block mb-1 font-semibold">Date Range</label>
+            <select 
+              value={filters.dateRange} 
+              onChange={e => setFilters({ ...filters, dateRange: e.target.value })}
+              className="form-input w-full rounded-lg" 
+              style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)' }}
+            >
               <option value="ytd">Year to Date</option>
               <option value="q1">Q1 2026</option>
               <option value="q2">Q2 2026</option>
@@ -154,40 +245,73 @@ export default function Reports() {
             </select>
           </div>
           <div className="flex-1" style={{ minWidth: '150px' }}>
-            <select className="form-input w-full rounded-lg" style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)' }}>
-              <option value="">Department</option>
-              <option value="eng">Engineering</option>
-              <option value="sales">Sales</option>
-              <option value="hr">Human Resources</option>
+            <label className="text-xs text-muted block mb-1 font-semibold">Department</label>
+            <select 
+              value={filters.department} 
+              onChange={e => setFilters({ ...filters, department: e.target.value })}
+              className="form-input w-full rounded-lg" 
+              style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)' }}
+            >
+              <option value="all">All Departments</option>
+              <option value="Manufacturing">Manufacturing</option>
+              <option value="Logistics">Logistics</option>
+              <option value="Corporate">Corporate</option>
+              <option value="Engineering">Engineering</option>
             </select>
           </div>
           <div className="flex-1" style={{ minWidth: '150px' }}>
-            <select className="form-input w-full rounded-lg" style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)' }}>
-              <option value="">Module</option>
-              <option value="env">Environmental</option>
-              <option value="soc">Social</option>
-              <option value="gov">Governance</option>
-              <option value="gam">Gamification</option>
+            <label className="text-xs text-muted block mb-1 font-semibold">Module</label>
+            <select 
+              value={filters.module} 
+              onChange={e => setFilters({ ...filters, module: e.target.value })}
+              className="form-input w-full rounded-lg" 
+              style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)' }}
+            >
+              <option value="all">All Modules</option>
+              <option value="Environmental">Environmental</option>
+              <option value="Social">Social</option>
+              <option value="Governance">Governance</option>
+              <option value="Gamification">Gamification</option>
             </select>
           </div>
           <div className="flex-1" style={{ minWidth: '150px' }}>
-            <select className="form-input w-full rounded-lg" style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)' }}>
-              <option value="">Employee</option>
+            <label className="text-xs text-muted block mb-1 font-semibold">Employee</label>
+            <select 
+              value={filters.employee} 
+              onChange={e => setFilters({ ...filters, employee: e.target.value })}
+              className="form-input w-full rounded-lg" 
+              style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)' }}
+            >
               <option value="all">All Employees</option>
+              <option value="Aditi Rao">Aditi Rao</option>
+              <option value="Karan Shah">Karan Shah</option>
             </select>
           </div>
           <div className="flex-1" style={{ minWidth: '150px' }}>
-            <select className="form-input w-full rounded-lg" style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)' }}>
-              <option value="">Challenge</option>
+            <label className="text-xs text-muted block mb-1 font-semibold">Challenge</label>
+            <select 
+              value={filters.challenge} 
+              onChange={e => setFilters({ ...filters, challenge: e.target.value })}
+              className="form-input w-full rounded-lg" 
+              style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)' }}
+            >
               <option value="all">All Challenges</option>
+              <option value="Zero Waste Week">Zero Waste Week</option>
+              <option value="Diversity Training">Diversity Training</option>
             </select>
           </div>
           <div className="flex-1" style={{ minWidth: '150px' }}>
-            <select className="form-input w-full rounded-lg" style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)' }}>
-              <option value="">ESG Category</option>
-              <option value="emissions">Emissions</option>
-              <option value="diversity">Diversity</option>
-              <option value="compliance">Compliance</option>
+            <label className="text-xs text-muted block mb-1 font-semibold">ESG Category</label>
+            <select 
+              value={filters.esgCategory} 
+              onChange={e => setFilters({ ...filters, esgCategory: e.target.value })}
+              className="form-input w-full rounded-lg" 
+              style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)' }}
+            >
+              <option value="all">All Categories</option>
+              <option value="Emissions">Emissions</option>
+              <option value="Diversity">Diversity</option>
+              <option value="Compliance">Compliance</option>
             </select>
           </div>
         </div>
@@ -197,40 +321,85 @@ export default function Reports() {
           <button 
             className="btn flex items-center gap-2 font-bold py-2 px-6 rounded-lg transition-all"
             style={{ background: 'transparent', border: '1px solid var(--accent-reports)', color: 'var(--accent-reports)' }}
-            onClick={() => handleGenerate('Custom Report')}
-            disabled={generating}
+            onClick={handleRunReport}
+            disabled={generatingKey !== ''}
           >
-            {generating ? <Activity className="animate-spin" size={16} /> : <Play size={16} fill="currentColor" />}
+            {generatingKey === 'run-report' ? <Activity className="animate-spin" size={16} /> : <Play size={16} fill="currentColor" />}
             Run Report
           </button>
           
           <button 
             className="btn flex items-center gap-2 font-semibold py-2 px-6 rounded-lg transition-all"
             style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'var(--text-muted)' }}
-            onClick={() => handleGenerate('PDF Export')}
-            disabled={generating}
+            onClick={() => triggerExport('pdf')}
+            disabled={generatingKey !== ''}
           >
-            Export: PDF
+            {generatingKey === 'export-pdf' ? <Activity className="animate-spin" size={16} /> : 'Export: PDF'}
           </button>
           
           <button 
             className="btn flex items-center gap-2 font-semibold py-2 px-6 rounded-lg transition-all"
             style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'var(--text-muted)' }}
-            onClick={() => handleGenerate('Excel Export')}
-            disabled={generating}
+            onClick={() => triggerExport('excel')}
+            disabled={generatingKey !== ''}
           >
-            Export: Excel
+            {generatingKey === 'export-excel' ? <Activity className="animate-spin" size={16} /> : 'Export: Excel'}
           </button>
 
           <button 
             className="btn flex items-center gap-2 font-semibold py-2 px-6 rounded-lg transition-all"
             style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'var(--text-muted)' }}
-            onClick={() => handleGenerate('CSV Export')}
-            disabled={generating}
+            onClick={() => triggerExport('csv')}
+            disabled={generatingKey !== ''}
           >
-            Export: CSV
+            {generatingKey === 'export-csv' ? <Activity className="animate-spin" size={16} /> : 'Export: CSV'}
           </button>
         </div>
+
+        {/* Live Filter Output Area */}
+        {reportOutput && (
+          <div className="mt-8 p-6 glass-panel animate-fade-in" style={{ borderRadius: '16px', background: 'rgba(255,255,255,0.01)' }}>
+            <div className="flex justify-between items-center mb-4">
+              <h4 className="text-sm font-semibold text-main">Report Output — Generated at {reportOutput.timestamp}</h4>
+              <span className="text-xs text-muted">Found {reportOutput.rows.length} rows</span>
+            </div>
+            
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr style={{ borderBottom: '1px solid var(--border-light)' }}>
+                    <th className="p-3 text-xs text-muted font-semibold">Date</th>
+                    <th className="p-3 text-xs text-muted font-semibold">Department</th>
+                    <th className="p-3 text-xs text-muted font-semibold">Module</th>
+                    <th className="p-3 text-xs text-muted font-semibold">Metric</th>
+                    <th className="p-3 text-xs text-muted font-semibold">Value</th>
+                    <th className="p-3 text-xs text-muted font-semibold">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reportOutput.rows.map(row => (
+                    <tr key={row.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                      <td className="p-3 text-xs text-muted">{row.date}</td>
+                      <td className="p-3 text-xs text-muted">{row.dept}</td>
+                      <td className="p-3 text-xs text-muted">{row.module}</td>
+                      <td className="p-3 text-xs text-muted">{row.metric}</td>
+                      <td className="p-3 text-xs text-main font-semibold">{row.value}</td>
+                      <td className="p-3">
+                        <span className="badge" style={{ 
+                          borderColor: row.status === 'Completed' ? '#10b981' : row.status === 'Active' ? '#f59e0b' : '#3b82f6',
+                          color: row.status === 'Completed' ? '#10b981' : row.status === 'Active' ? '#f59e0b' : '#3b82f6'
+                        }}>
+                          {row.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
       </div>
       
     </div>

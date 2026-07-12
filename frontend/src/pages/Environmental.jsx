@@ -1,23 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import Modal from '../components/Modal';
+import { useAuth } from '../context/AuthContext';
 
 export default function Environmental() {
+  const { token } = useAuth();
+  const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
+
   const [goals, setGoals] = useState([]);
   const [selectedIds, setSelectedIds] = useState(new Set());
-  
+
   const [isModalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  
+
   // Filtering States
   const [filterDept, setFilterDept] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   // Premium UI States
   const [toast, setToast] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState({ isOpen: false, isMultiple: false, id: null });
-  
+
   const defaultForm = { name: '', department: 'Manufacturing', target_co2: '', current_co2: '0', deadline: '', status: 'Active' };
   const [formData, setFormData] = useState(defaultForm);
 
@@ -27,13 +31,13 @@ export default function Environmental() {
   };
 
   const fetchGoals = () => {
-    fetch('http://localhost:5005/api/environmental/goals')
+    fetch('http://localhost:5005/api/environmental/goals', { headers: { 'Authorization': `Bearer ${token}` } })
       .then(res => res.json())
       .then(data => setGoals(data))
       .catch(console.error);
   };
 
-  useEffect(() => fetchGoals(), []);
+  useEffect(() => fetchGoals(), [token]);
 
   const openNewModal = () => {
     setEditingId(null);
@@ -58,15 +62,11 @@ export default function Environmental() {
     e.preventDefault();
     if (editingId) {
       await fetch(`http://localhost:5005/api/environmental/goals/${editingId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        method: 'PUT', headers, body: JSON.stringify(formData)
       });
     } else {
       await fetch('http://localhost:5005/api/environmental/goals', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        method: 'POST', headers, body: JSON.stringify(formData)
       });
     }
     setModalOpen(false);
@@ -87,12 +87,12 @@ export default function Environmental() {
   const executeDelete = async () => {
     if (confirmDelete.isMultiple) {
       await Promise.all(
-        Array.from(selectedIds).map(id => fetch(`http://localhost:5005/api/environmental/goals/${id}`, { method: 'DELETE' }))
+        Array.from(selectedIds).map(id => fetch(`http://localhost:5005/api/environmental/goals/${id}`, { method: 'DELETE', headers }))
       );
       setSelectedIds(new Set());
       showToast(`${selectedIds.size} goal(s) deleted.`, 'success');
     } else if (confirmDelete.id) {
-      await fetch(`http://localhost:5005/api/environmental/goals/${confirmDelete.id}`, { method: 'DELETE' });
+      await fetch(`http://localhost:5005/api/environmental/goals/${confirmDelete.id}`, { method: 'DELETE', headers });
       showToast("Goal deleted.", 'success');
     }
     setConfirmDelete({ isOpen: false, isMultiple: false, id: null });
@@ -101,16 +101,11 @@ export default function Environmental() {
 
   const handleExport = () => {
     if (goals.length === 0) return showToast("No data to export.");
-    
-    // Create CSV header
-    const headers = Object.keys(goals[0]).join(',');
-    // Create CSV rows
+    const csvHeaders = Object.keys(goals[0]).join(',');
     const rows = goals.map(g => Object.values(g).map(v => `"${v}"`).join(',')).join('\n');
-    
-    const csvContent = `${headers}\n${rows}`;
+    const csvContent = `${csvHeaders}\n${rows}`;
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
-    
     const link = document.createElement("a");
     link.setAttribute("href", url);
     link.setAttribute("download", "environmental_goals_export.csv");
@@ -143,7 +138,7 @@ export default function Environmental() {
 
   return (
     <div className="module-layout p-6 flex-col gap-4" style={{ height: '100%', overflowY: 'auto' }}>
-      
+
       {/* Filters Row */}
       <div className="grid-4 gap-3">
         <select className="select-input w-full" onChange={e => setFilterDept(e.target.value)} value={filterDept}>
@@ -181,11 +176,11 @@ export default function Environmental() {
       </div>
 
       {/* Data Table */}
-      <div className="glass-panel" style={{marginTop: '1rem', overflowX: 'auto'}}>
-        <table className="data-table w-full text-left" style={{borderCollapse: 'collapse', whiteSpace: 'nowrap'}}>
+      <div className="glass-panel" style={{ marginTop: '1rem', overflowX: 'auto' }}>
+        <table className="data-table w-full text-left" style={{ borderCollapse: 'collapse', whiteSpace: 'nowrap' }}>
           <thead>
-            <tr style={{borderBottom: '1px solid var(--border-light)'}}>
-              <th className="p-4" style={{width: '40px'}}>
+            <tr style={{ borderBottom: '1px solid var(--border-light)' }}>
+              <th className="p-4" style={{ width: '40px' }}>
                 <input type="checkbox" onChange={toggleSelectAll} checked={filteredGoals.length > 0 && selectedIds.size === filteredGoals.length} />
               </th>
               <th className="p-4 text-sm text-muted font-semibold">Name</th>
@@ -202,7 +197,7 @@ export default function Environmental() {
             {filteredGoals.map(goal => {
               const progress = Math.round((goal.current_co2 / goal.target_co2) * 100) || 0;
               return (
-                <tr key={goal.id} style={{borderBottom: '1px solid rgba(255,255,255,0.05)', background: selectedIds.has(goal.id) ? 'rgba(46, 160, 67, 0.1)' : 'transparent'}}>
+                <tr key={goal.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', background: selectedIds.has(goal.id) ? 'rgba(46, 160, 67, 0.1)' : 'transparent' }}>
                   <td className="p-4">
                     <input type="checkbox" checked={selectedIds.has(goal.id)} onChange={() => toggleSelect(goal.id)} />
                   </td>
@@ -211,10 +206,10 @@ export default function Environmental() {
                   <td className="p-4 text-sm">{goal.target_co2} t</td>
                   <td className="p-4 text-sm">{goal.current_co2} t</td>
                   <td className="p-4 text-sm flex items-center gap-2">
-                    <div style={{width: '100px', height: '12px', background: 'rgba(255,255,255,0.1)', borderRadius: '6px', overflow: 'hidden'}}>
-                      <div style={{width: `${Math.min(progress, 100)}%`, height: '100%', background: 'var(--accent-env)'}}></div>
+                    <div style={{ width: '100px', height: '12px', background: 'rgba(255,255,255,0.1)', borderRadius: '6px', overflow: 'hidden' }}>
+                      <div style={{ width: `${Math.min(progress, 100)}%`, height: '100%', background: 'var(--accent-env)' }}></div>
                     </div>
-                    <span className="text-muted" style={{fontSize: '0.8rem'}}>{progress}%</span>
+                    <span className="text-muted" style={{ fontSize: '0.8rem' }}>{progress}%</span>
                   </td>
                   <td className="p-4 text-sm text-muted">{goal.deadline}</td>
                   <td className="p-4">
@@ -223,7 +218,7 @@ export default function Environmental() {
                     </span>
                   </td>
                   <td className="p-4 text-right">
-                    <button className="btn btn-ghost" style={{padding: '0.2rem 0.5rem', color: '#ef4444', borderColor: '#ef4444'}} onClick={() => promptDelete(goal.id)}>Remove</button>
+                    <button className="btn btn-ghost" style={{ padding: '0.2rem 0.5rem', color: '#ef4444', borderColor: '#ef4444' }} onClick={() => promptDelete(goal.id)}>Remove</button>
                   </td>
                 </tr>
               );
@@ -231,33 +226,33 @@ export default function Environmental() {
           </tbody>
         </table>
       </div>
-      
-      <p className="text-xs text-muted" style={{marginTop: '0.5rem'}}>Row actions: View | Edit | Delete • Carbon Transactions auto-generated from Purchase/Manufacturing/Fleet/Expenses</p>
+
+      <p className="text-xs text-muted" style={{ marginTop: '0.5rem' }}>Row actions: View | Edit | Delete • Carbon Transactions auto-generated from Purchase/Manufacturing/Fleet/Expenses</p>
 
       {/* Create/Edit Modal */}
       <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} title={editingId ? "Edit Environmental Goal" : "New Environmental Goal"}>
         <form onSubmit={handleSave}>
           <label>Goal Name</label>
-          <input required type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="e.g. Cut Packaging Waste" />
-          
+          <input required type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} placeholder="e.g. Cut Packaging Waste" />
+
           <label>Department</label>
-          <select value={formData.department} onChange={e => setFormData({...formData, department: e.target.value})}>
+          <select value={formData.department} onChange={e => setFormData({ ...formData, department: e.target.value })}>
             <option>Manufacturing</option>
             <option>Logistics</option>
             <option>Corporate</option>
           </select>
-          
+
           <label>Target CO₂ Reduction (tons)</label>
-          <input required type="number" value={formData.target_co2} onChange={e => setFormData({...formData, target_co2: e.target.value})} placeholder="500" />
-          
+          <input required type="number" value={formData.target_co2} onChange={e => setFormData({ ...formData, target_co2: e.target.value })} placeholder="500" />
+
           <label>Current CO₂ Reduction (tons)</label>
-          <input required type="number" value={formData.current_co2} onChange={e => setFormData({...formData, current_co2: e.target.value})} placeholder="0" />
-          
+          <input required type="number" value={formData.current_co2} onChange={e => setFormData({ ...formData, current_co2: e.target.value })} placeholder="0" />
+
           <label>Deadline</label>
-          <input required type="date" value={formData.deadline} onChange={e => setFormData({...formData, deadline: e.target.value})} />
-          
+          <input required type="date" value={formData.deadline} onChange={e => setFormData({ ...formData, deadline: e.target.value })} />
+
           <label>Status</label>
-          <select value={formData.status} onChange={e => setFormData({...formData, status: e.target.value})}>
+          <select value={formData.status} onChange={e => setFormData({ ...formData, status: e.target.value })}>
             <option>Active</option>
             <option>Completed</option>
             <option>On Track</option>
@@ -271,14 +266,14 @@ export default function Environmental() {
       </Modal>
 
       {/* Delete Confirmation Modal */}
-      <Modal isOpen={confirmDelete.isOpen} onClose={() => setConfirmDelete({isOpen: false})} title="Confirm Deletion">
+      <Modal isOpen={confirmDelete.isOpen} onClose={() => setConfirmDelete({ isOpen: false })} title="Confirm Deletion">
         <div className="p-2">
           <p className="text-muted mb-6">
             Are you sure you want to delete {confirmDelete.isMultiple ? <strong>{selectedIds.size} selected goal(s)</strong> : 'this goal'}? This action cannot be undone.
           </p>
           <div className="flex justify-end gap-3 mt-6">
-            <button className="btn btn-ghost" onClick={() => setConfirmDelete({isOpen: false})}>Cancel</button>
-            <button className="btn btn-danger-outline" style={{background: 'rgba(239, 68, 68, 0.1)'}} onClick={executeDelete}>Yes, Delete</button>
+            <button className="btn btn-ghost" onClick={() => setConfirmDelete({ isOpen: false })}>Cancel</button>
+            <button className="btn btn-danger-outline" style={{ background: 'rgba(239, 68, 68, 0.1)' }} onClick={executeDelete}>Yes, Delete</button>
           </div>
         </div>
       </Modal>
@@ -295,8 +290,8 @@ export default function Environmental() {
           display: 'flex', alignItems: 'center', gap: '1rem',
           animation: 'toastDrop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards'
         }}>
-          {toast.type === 'error' ? <span style={{color: '#ef4444', fontSize: '1.6rem'}}>⚠️</span> : <span style={{color: '#10b981', fontSize: '1.6rem'}}>✨</span>}
-          <span style={{color: 'var(--text-main)', fontWeight: 600, fontSize: '1.1rem'}}>{toast.message}</span>
+          {toast.type === 'error' ? <span style={{ color: '#ef4444', fontSize: '1.6rem' }}>⚠️</span> : <span style={{ color: '#10b981', fontSize: '1.6rem' }}>✨</span>}
+          <span style={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '1.1rem' }}>{toast.message}</span>
         </div>
       )}
 
