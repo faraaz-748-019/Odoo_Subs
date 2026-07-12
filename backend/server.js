@@ -3,7 +3,7 @@ const cors = require('cors');
 const { setupDatabase } = require('./database');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5005;
 
 app.use(cors());
 app.use(express.json());
@@ -91,6 +91,14 @@ app.post('/api/environmental/goals', async (req, res) => {
     const history = await db.all('SELECT * FROM esg_scores_history ORDER BY record_date DESC LIMIT 1');
     if(history.length > 0) await db.run('UPDATE esg_scores_history SET environmental = environmental + 1 WHERE id = ?', [history[0].id]);
     res.json({ id: result.lastID });
+});
+app.put('/api/environmental/goals/:id', async (req, res) => {
+    const { name, department, target_co2, current_co2, deadline, status } = req.body;
+    await db.run(
+        'UPDATE goals SET name = ?, department = ?, target_co2 = ?, current_co2 = ?, deadline = ?, status = ? WHERE id = ?',
+        [name, department, target_co2, current_co2, deadline, status, req.params.id]
+    );
+    res.json({ success: true });
 });
 app.delete('/api/environmental/goals/:id', async (req, res) => {
     await db.run('DELETE FROM goals WHERE id = ?', req.params.id);

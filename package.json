@@ -1,0 +1,24 @@
+{
+  "name": "ecosphere_repo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix frontend\" \"node backend/server.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/faraaz-748-019/Odoo_Subs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/faraaz-748-019/Odoo_Subs/issues"
+  },
+  "homepage": "https://github.com/faraaz-748-019/Odoo_Subs#readme",
+  "dependencies": {
+    "concurrently": "^10.0.3"
+  }
+}

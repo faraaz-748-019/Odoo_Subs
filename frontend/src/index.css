@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
+  color-scheme: dark;
   --bg-main: #0a0c10;
   --bg-panel: rgba(22, 27, 34, 0.6);
   --bg-panel-solid: #161b22;
@@ -130,19 +131,96 @@ a {
 }
 
 .btn-secondary {
-  background: #cbd5e1;
-  color: #0f172a;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+  border: 1px solid var(--border-light);
 }
 .btn-secondary:hover {
-  background: #f8fafc;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-danger-outline {
+  background: transparent;
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+.btn-danger-outline:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
 }
 
 .btn-ghost {
   background: transparent;
-  border: 1px solid var(--border-light);
+  border: 1px solid transparent;
 }
 .btn-ghost:hover {
   background: rgba(255,255,255,0.05);
+}
+
+/* Premium Form Inputs */
+.select-input {
+  appearance: none;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-light);
+  color: var(--text-main);
+  padding: 0.75rem 1rem;
+  padding-right: 2.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  outline: none;
+  cursor: pointer;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  transition: all 0.2s;
+  font-family: inherit;
+  margin: 0;
+  height: 100%;
+}
+.select-input:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.select-input:focus {
+  border-color: var(--accent-env);
+  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.15);
+}
+.select-input option {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+}
+
+.search-input-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-light);
+  padding: 0 1rem;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+  margin: 0;
+  height: 100%;
+}
+.search-input-container:focus-within {
+  border-color: var(--accent-env);
+  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.15);
+}
+.search-input-container input {
+  background: transparent !important;
+  border: none !important;
+  color: var(--text-main) !important;
+  outline: none !important;
+  width: 100%;
+  padding: 0.75rem 0 !important;
+  font-size: 1rem;
+  font-family: inherit;
+  margin: 0 !important;
+  box-shadow: none !important;
+}
+.search-input-container input::placeholder {
+  color: var(--text-muted);
 }
 
 /* Typography */
@@ -168,6 +246,8 @@ p { margin: 0; color: var(--text-muted); }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
 /* Utility Classes */
+.flex-1 { flex: 1; }
+.flex-wrap { flex-wrap: wrap; }
 .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); }
 .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); }
 .w-full { width: 100%; }
@@ -209,18 +289,23 @@ p { margin: 0; color: var(--text-muted); }
 
 .nav-links {
   display: flex;
+  flex: 1;
   border: 1px solid var(--border-light);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .nav-link {
-  padding: 0.5rem 1rem;
+  flex: 1;
+  text-align: center;
+  padding: 0.85rem 1rem;
   color: var(--text-muted);
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 1.05rem;
+  font-weight: 500;
   border-right: 1px solid var(--border-light);
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .nav-link:last-child { border-right: none; }
 .nav-link:hover { background: rgba(255,255,255,0.05); color: var(--text-main); }
@@ -309,4 +394,16 @@ label {
 .kpi-tile.overall:hover {
   box-shadow: 0 8px 24px rgba(96, 165, 250, 0.15);
   border-color: rgba(96, 165, 250, 0.8);
+}
+
+/* Animations */
+@keyframes toastDrop {
+  0% { opacity: 0; transform: translate(-50%, -20px) scale(0.9); }
+  60% { opacity: 1; transform: translate(-50%, 10px) scale(1.05); }
+  100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+@keyframes modalPop {
+  0% { opacity: 0; transform: scale(0.92) translateY(10px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
 }
