@@ -4,6 +4,28 @@ import { Leaf, Users, Shield, Award, ArrowRight, BarChart2, CheckCircle2 } from 
 import '../landing.css';
 
 export default function LandingPage() {
+  const visualRef = React.useRef();
+
+  const handleMouseMove = (e) => {
+    const card = visualRef.current;
+    if (!card) return;
+    
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    
+    const rX = (y / (rect.height / 2)) * -12; 
+    const rY = (x / (rect.width / 2)) * 12;
+    
+    card.style.transform = `perspective(1000px) rotateX(${rX}deg) rotateY(${rY}deg) scale3d(1.02, 1.02, 1.02)`;
+  };
+
+  const handleMouseLeave = () => {
+    const card = visualRef.current;
+    if (!card) return;
+    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+  };
+
   return (
     <div className="landing-container">
       {/* Navbar Header */}
@@ -46,8 +68,8 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="hero-visual">
-          <div className="visual-glass-frame">
+        <div className="hero-visual" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
+          <div className="visual-glass-frame" ref={visualRef}>
             <img src="/landing_hero.png" alt="EcoSphere Global Telemetry Digital Twin" className="visual-image" />
             <div className="visual-glow-overlay"></div>
           </div>
