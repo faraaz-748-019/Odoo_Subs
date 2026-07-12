@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function LoginPage() {
     const { login } = useAuth();
+    const navigate = useNavigate();
     const [isSignup, setIsSignup] = useState(false);
     const [form, setForm] = useState({ name: '', email: '', password: '' });
     const [error, setError] = useState('');
@@ -22,6 +24,7 @@ export default function LoginPage() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Request failed');
             login(data.token, data.user);
+            navigate('/');
         } catch (err) {
             setError(err.message);
         } finally {
@@ -37,6 +40,7 @@ export default function LoginPage() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Demo login failed');
             login(data.token, data.user);
+            navigate('/');
         } catch (err) {
             setError(err.message);
         } finally {
