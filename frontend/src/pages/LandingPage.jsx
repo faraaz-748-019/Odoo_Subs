@@ -4,10 +4,14 @@ import { Leaf, Users, Shield, Award, ArrowRight, BarChart2, CheckCircle2 } from 
 import '../landing.css';
 
 export default function LandingPage() {
-  const visualRef = React.useRef();
+  const heroRef = React.useRef();
+  const envRef = React.useRef();
+  const socRef = React.useRef();
+  const govRef = React.useRef();
+  const gamRef = React.useRef();
 
-  const handleMouseMove = (e) => {
-    const card = visualRef.current;
+  const handleTiltMove = (e, ref) => {
+    const card = ref.current;
     if (!card) return;
     
     const rect = card.getBoundingClientRect();
@@ -20,8 +24,8 @@ export default function LandingPage() {
     card.style.transform = `perspective(1000px) rotateX(${rX}deg) rotateY(${rY}deg) scale3d(1.02, 1.02, 1.02)`;
   };
 
-  const handleMouseLeave = () => {
-    const card = visualRef.current;
+  const handleTiltLeave = (ref) => {
+    const card = ref.current;
     if (!card) return;
     card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
   };
@@ -68,8 +72,8 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="hero-visual" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
-          <div className="visual-glass-frame" ref={visualRef}>
+        <div className="hero-visual" onMouseMove={(e) => handleTiltMove(e, heroRef)} onMouseLeave={() => handleTiltLeave(heroRef)}>
+          <div className="visual-glass-frame" ref={heroRef}>
             <img src="/landing_hero.png" alt="EcoSphere Global Telemetry Digital Twin" className="visual-image" />
             <div className="visual-glow-overlay"></div>
           </div>
@@ -119,8 +123,10 @@ export default function LandingPage() {
               <li><CheckCircle2 size={16} className="text-env" /> Integrated resource utility audits</li>
             </ul>
           </div>
-          <div className="feature-image-card">
-            <img src="/esg_environmental.png" alt="Environmental Telemetry Features" />
+          <div className="feature-image-card-wrapper" onMouseMove={(e) => handleTiltMove(e, envRef)} onMouseLeave={() => handleTiltLeave(envRef)}>
+            <div className="feature-image-card" ref={envRef}>
+              <img src="/esg_environmental.png" alt="Environmental Telemetry Features" />
+            </div>
           </div>
         </div>
 
@@ -138,8 +144,10 @@ export default function LandingPage() {
               <li><CheckCircle2 size={16} className="text-social" /> CSR community event coordinators</li>
             </ul>
           </div>
-          <div className="feature-image-card">
-            <img src="/esg_social.png" alt="Social CSR Features" />
+          <div className="feature-image-card-wrapper" onMouseMove={(e) => handleTiltMove(e, socRef)} onMouseLeave={() => handleTiltLeave(socRef)}>
+            <div className="feature-image-card" ref={socRef}>
+              <img src="/esg_social.png" alt="Social CSR Features" />
+            </div>
           </div>
         </div>
 
@@ -157,8 +165,10 @@ export default function LandingPage() {
               <li><CheckCircle2 size={16} className="text-gov" /> Severity-based compliance ticket manager</li>
             </ul>
           </div>
-          <div className="feature-image-card">
-            <img src="/esg_governance.png" alt="Governance Compliance Features" />
+          <div className="feature-image-card-wrapper" onMouseMove={(e) => handleTiltMove(e, govRef)} onMouseLeave={() => handleTiltLeave(govRef)}>
+            <div className="feature-image-card" ref={govRef}>
+              <img src="/esg_governance.png" alt="Governance Compliance Features" />
+            </div>
           </div>
         </div>
 
@@ -176,8 +186,10 @@ export default function LandingPage() {
               <li><CheckCircle2 size={16} className="text-gamify" /> Dynamic XP rewards leaderboard</li>
             </ul>
           </div>
-          <div className="feature-image-card">
-            <img src="/esg_gamification.png" alt="Gamification Milestones Features" />
+          <div className="feature-image-card-wrapper" onMouseMove={(e) => handleTiltMove(e, gamRef)} onMouseLeave={() => handleTiltLeave(gamRef)}>
+            <div className="feature-image-card" ref={gamRef}>
+              <img src="/esg_gamification.png" alt="Gamification Milestones Features" />
+            </div>
           </div>
         </div>
       </section>
