@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import AppLayout from './components/AppLayout';
 import LoginPage from './pages/LoginPage';
+import LandingPage from './pages/LandingPage';
 import { Dashboard, Environmental, Social, Governance, Gamification, Reports, Settings } from './pages';
 
 function ProtectedRoute({ children }) {
@@ -16,8 +17,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
+        <Route path="/app" element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
           <Route index element={<Dashboard />} />
           <Route path="environmental" element={<Environmental />} />
           <Route path="social" element={<Social />} />

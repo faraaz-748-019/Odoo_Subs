@@ -39,28 +39,28 @@ export default function Dashboard() {
 
       {/* Top Scores */}
       <div className="grid-4 gap-4">
-        <Link to="/environmental" className="glass-panel p-4 theme-env flex-col justify-between kpi-tile" style={{ minHeight: '130px', cursor: 'pointer' }}>
+        <Link to="/app/environmental" className="glass-panel p-4 theme-env flex-col justify-between kpi-tile" style={{ minHeight: '130px', cursor: 'pointer' }}>
           <div className="flex justify-between items-start">
             <span className="text-muted text-sm font-semibold">Environmental Score</span>
             {renderTrend(data.trends.environmental, '34, 197, 94')}
           </div>
           <div className="score-value theme-env-text text-4xl" style={{ marginTop: 'auto' }}>{data.scores.environmental} <span className="text-sm text-muted" style={{ fontSize: '1rem' }}>/ 100</span></div>
         </Link>
-        <Link to="/social" className="glass-panel p-4 theme-social flex-col justify-between kpi-tile" style={{ minHeight: '130px', cursor: 'pointer' }}>
+        <Link to="/app/social" className="glass-panel p-4 theme-social flex-col justify-between kpi-tile" style={{ minHeight: '130px', cursor: 'pointer' }}>
           <div className="flex justify-between items-start">
             <span className="text-muted text-sm font-semibold">Social Score</span>
             {renderTrend(data.trends.social, '56, 189, 248')}
           </div>
           <div className="score-value theme-social-text text-4xl" style={{ marginTop: 'auto' }}>{data.scores.social} <span className="text-sm text-muted" style={{ fontSize: '1rem' }}>/ 100</span></div>
         </Link>
-        <Link to="/governance" className="glass-panel p-4 theme-gov flex-col justify-between kpi-tile" style={{ minHeight: '130px', cursor: 'pointer' }}>
+        <Link to="/app/governance" className="glass-panel p-4 theme-gov flex-col justify-between kpi-tile" style={{ minHeight: '130px', cursor: 'pointer' }}>
           <div className="flex justify-between items-start">
             <span className="text-muted text-sm font-semibold">Governance Score</span>
             {renderTrend(data.trends.governance, '168, 85, 247')}
           </div>
           <div className="score-value theme-gov-text text-4xl" style={{ marginTop: 'auto' }}>{data.scores.governance} <span className="text-sm text-muted" style={{ fontSize: '1rem' }}>/ 100</span></div>
         </Link>
-        <Link to="/" className="glass-panel p-4 flex-col justify-between kpi-tile overall" style={{ minHeight: '130px', cursor: 'default' }}>
+        <Link to="/app" className="glass-panel p-4 flex-col justify-between kpi-tile overall" style={{ minHeight: '130px', cursor: 'default' }}>
           <div className="flex justify-between items-start">
             <span className="text-muted text-sm font-semibold">Overall ESG Score</span>
             {renderTrend(data.trends.overall, '96, 165, 250')}

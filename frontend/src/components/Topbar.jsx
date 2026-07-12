@@ -27,13 +27,13 @@ export default function Topbar() {
       </div>
 
       <div className="nav-links flex">
-        <NavLink to="/" end className={({ isActive }) => getNavClass(isActive, '')}>Dashboard</NavLink>
-        <NavLink to="/environmental" className={({ isActive }) => getNavClass(isActive, 'theme-env-text')}>Environmental</NavLink>
-        <NavLink to="/social" className={({ isActive }) => getNavClass(isActive, 'theme-social-text')}>Social</NavLink>
-        <NavLink to="/governance" className={({ isActive }) => getNavClass(isActive, 'theme-gov-text')}>Governance</NavLink>
-        <NavLink to="/gamification" className={({ isActive }) => getNavClass(isActive, 'theme-gamify-text')}>Gamification</NavLink>
-        <NavLink to="/reports" className={({ isActive }) => getNavClass(isActive, '')}>Reports</NavLink>
-        <NavLink to="/settings" className={({ isActive }) => getNavClass(isActive, '')}>Settings</NavLink>
+        <NavLink to="/app" end className={({ isActive }) => getNavClass(isActive, '')}>Dashboard</NavLink>
+        <NavLink to="/app/environmental" className={({ isActive }) => getNavClass(isActive, 'theme-env-text')}>Environmental</NavLink>
+        <NavLink to="/app/social" className={({ isActive }) => getNavClass(isActive, 'theme-social-text')}>Social</NavLink>
+        <NavLink to="/app/governance" className={({ isActive }) => getNavClass(isActive, 'theme-gov-text')}>Governance</NavLink>
+        <NavLink to="/app/gamification" className={({ isActive }) => getNavClass(isActive, 'theme-gamify-text')}>Gamification</NavLink>
+        <NavLink to="/app/reports" className={({ isActive }) => getNavClass(isActive, '')}>Reports</NavLink>
+        <NavLink to="/app/settings" className={({ isActive }) => getNavClass(isActive, '')}>Settings</NavLink>
       </div>
 
       <div className="flex items-center gap-3" style={{ marginLeft: 'auto' }}>

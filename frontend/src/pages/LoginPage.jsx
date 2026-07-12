@@ -26,7 +26,7 @@ export default function LoginPage() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Request failed');
             login(data.token, data.user);
-            navigate('/');
+            navigate('/app');
         } catch (err) {
             setError(err.message);
         } finally {
@@ -42,7 +42,7 @@ export default function LoginPage() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Demo login failed');
             login(data.token, data.user);
-            navigate('/');
+            navigate('/app');
         } catch (err) {
             setError(err.message);
         } finally {
