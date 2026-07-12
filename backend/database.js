@@ -51,7 +51,17 @@ async function createSchema(db) {
             user_id INTEGER, badge_id INTEGER, earned_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY(badge_id) REFERENCES badges(id)
         );
+        CREATE TABLE IF NOT EXISTS settings (
+            key TEXT PRIMARY KEY,
+            value INTEGER
+        );
     `);
+    
+    // Seed default settings on creation
+    await db.run("INSERT OR IGNORE INTO settings (key, value) VALUES ('auto_emission', 1)");
+    await db.run("INSERT OR IGNORE INTO settings (key, value) VALUES ('require_evidence', 0)");
+    await db.run("INSERT OR IGNORE INTO settings (key, value) VALUES ('auto_award_badge', 1)");
+    await db.run("INSERT OR IGNORE INTO settings (key, value) VALUES ('email_alerts', 1)");
 }
 
 async function seedDemoData(db) {

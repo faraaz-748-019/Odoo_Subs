@@ -305,3 +305,44 @@ app.post('/api/gamification/challenges/:id/join', async (req, res) => {
     }
 });
 
+// --- Settings API (Persistence Fix) ---
+app.get('/api/settings', async (req, res) => {
+    try {
+        const rows = await req.db.all('SELECT * FROM settings');
+        const settingsObj = {};
+        rows.forEach(r => {
+            const keyMap = {
+                'auto_emission': 'autoEmission',
+                'require_evidence': 'requireEvidence',
+                'auto_award_badge': 'autoAwardBadge',
+                'email_alerts': 'emailAlerts'
+            };
+            const mappedKey = keyMap[r.key] || r.key;
+            settingsObj[mappedKey] = r.value === 1;
+        });
+        res.json(settingsObj);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch settings' });
+    }
+});
+
+app.put('/api/settings', async (req, res) => {
+    try {
+        const { key, value } = req.body;
+        const keyMap = {
+            'autoEmission': 'auto_emission',
+            'requireEvidence': 'require_evidence',
+            'autoAwardBadge': 'auto_award_badge',
+            'email_alerts': 'email_alerts'
+        };
+        const dbKey = keyMap[key] || key;
+        const intVal = value ? 1 : 0;
+        await req.db.run('UPDATE settings SET value = ? WHERE key = ?', [intVal, dbKey]);
+        res.json({ success: true });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to update settings' });
+    }
+});
+

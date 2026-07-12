@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from '../components/Modal';
+import { useAuth } from '../context/AuthContext';
+import { API_BASE } from '../config';
 
 export default function Settings() {
+  const { token } = useAuth();
+  const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
+
   const [activeTab, setActiveTab] = useState('departments');
   const [toggles, setToggles] = useState({
     autoEmission: true,
@@ -14,6 +19,21 @@ export default function Settings() {
   const [isDeptModalOpen, setDeptModalOpen] = useState(false);
   const [isCatModalOpen, setCatModalOpen] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
+
+  const fetchSettings = () => {
+    fetch(`${API_BASE}/api/settings`, { headers })
+      .then(res => res.json())
+      .then(data => {
+        if (data && !data.error) setToggles(data);
+      })
+      .catch(console.error);
+  };
+
+  useEffect(() => {
+    if (token) {
+      fetchSettings();
+    }
+  }, [token]);
 
   const [depts, setDepts] = useState([
     { name: 'Manufacturing', code: 'MFC', head: 'S. Nair', parent: '—', emp: '134', status: 'Active' },
@@ -32,12 +52,20 @@ export default function Settings() {
   const [newDept, setNewDept] = useState({ name: '', code: '', head: '', parent: '—', emp: '0', status: 'Active' });
   const [newCat, setNewCat] = useState({ name: '', module: 'Environmental', weight: '10%', desc: '' });
 
-  const toggleSetting = (key) => {
-    setToggles(prev => {
-      const next = { ...prev, [key]: !prev[key] };
-      triggerMessage('Configuration updated successfully.');
-      return next;
-    });
+  const toggleSetting = async (key) => {
+    const newValue = !toggles[key];
+    setToggles(prev => ({ ...prev, [key]: newValue }));
+    triggerMessage('Configuration updated successfully.');
+
+    try {
+      await fetch(`${API_BASE}/api/settings`, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify({ key, value: newValue })
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const triggerMessage = (msg) => {
